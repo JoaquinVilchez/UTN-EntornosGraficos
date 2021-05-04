@@ -19,6 +19,7 @@ class CreateStudentSubjectTable extends Migration
             $table->foreign('student_id')->references('id')->on('users');
             $table->unsignedBigInteger('subject_id');
             $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->string('status')->default('enrolled');
             $table->timestamps();
         });
     }

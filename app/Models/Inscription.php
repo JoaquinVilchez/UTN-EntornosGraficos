@@ -10,4 +10,14 @@ class Inscription extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function meeting()
+    {
+        return $this->belongsTo(Meeting::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
