@@ -71,7 +71,7 @@
                             <label for="university_id" class="col-md-4 col-form-label text-md-right">{{ __('Legajo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="university_id" type="text" class="form-control @error('university_id') is-invalid @enderror" name="university_id" value="{{ old('university_id') }}" required autocomplete="university_id">
+                                <input id="university_id" type="text" class="form-control @error('university_id') is-invalid @enderror" name="university_id" value="{{ old('university_id') }}" autocomplete="university_id">
 
                                 @error('university_id')
                                     <span class="invalid-feedback" role="alert">

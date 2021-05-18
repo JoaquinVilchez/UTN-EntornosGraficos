@@ -51,4 +51,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Subject::class);
     }
+
+    public function getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getType()
+    {
+        if ($this->type == 'student') {
+            return 'Estudiante';
+        } elseif ($this->type == 'teacher') {
+            return 'Profesor';
+        } elseif ($this->type == 'admin') {
+            return 'Administrador';
+        }
+    }
 }
