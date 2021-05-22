@@ -25,7 +25,7 @@
                             <td>{{$user->getType()}}</td>
                             <td>
                                 <a href="{{route('user.edit', $user->id)}}">Editar</a>
-                                <a href="#">Eliminar</a>
+                                <a href="{{route('user.destroy', $user->id)}}">Eliminar</a>
                             </td>
                         </tr>
                     @endforeach
