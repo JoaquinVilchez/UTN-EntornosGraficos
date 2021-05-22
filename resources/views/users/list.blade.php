@@ -25,7 +25,7 @@
                             <td>{{$user->getType()}}</td>
                             <td>
                                 <a href="{{route('user.edit', $user->id)}}">Editar</a>
-                                <a href="{{route('user.destroy', $user->id)}}">Eliminar</a>
+                                <a href="#" data-toggle="modal" data-target="#deleteModal" data-userid="{{$user->id}}">Eliminar</a>
                             </td>
                         </tr>
                     @endforeach
@@ -35,4 +35,45 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Eliminar usuario</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="#">
+              <input type="text" value="" id="userid">
+              ¿Estás seguro de eliminar este usuario?
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+@endsection
+
+@section('js-script')
+    <script>
+
+      $('#deleteModal').on('show.bs.modal', function(event){
+        alert('hola');
+        var button = $(event.relatedTarget)
+
+        var userid = button.data('userid')
+        var modal = $(this)
+        console.log('hola')
+        console.log(userid)
+        modal.find('.modal-body #userid').val(userid)
+      });
+    </script>
 @endsection
