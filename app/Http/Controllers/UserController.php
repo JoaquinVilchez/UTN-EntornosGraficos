@@ -91,11 +91,16 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $user = User::find($id);
-        $user->delete();
+        try {
+            $user = User::findOrFail($request->userid);
+            $userType = $user->getType();
+            $user->delete();
 
-        return redirect()->route('user.index');
+            return redirect()->route('user.index')->with('success_message', $userType . ' eliminado con éxito.');
+        } catch (\Throwable $th) {
+            return redirect()->route('user.index')->with('error_message', 'Hubo un problema y no pudimos eliminar al usuario.');
+        }
     }
 }
