@@ -100,8 +100,7 @@ class UserController extends Controller
                 'status' => 'deleted'
             ]);
 
-            //Agregar despues una condicion que verifique si el usuario tiene alguna relacion con algo.
-            //En caso de tener una relacion, borrar con bandera, caso contrario eliminar en bd
+            // TODO: Agregar despues una condicion que verifique si el usuario tiene alguna relacion con algo. En caso de tener una relacion, borrar con bandera, caso contrario eliminar en bd
 
             return redirect()->route('user.index')->with('success_message', $userType . ' eliminado con éxito.');
         } catch (\Throwable $th) {
