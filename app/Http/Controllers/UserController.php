@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::where('status', 'active')->get();
         return view('users.list')->with('users', $users);
     }
 
@@ -96,7 +96,12 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($request->userid);
             $userType = $user->getType();
-            $user->delete();
+            $user->update([
+                'status' => 'deleted'
+            ]);
+
+            //Agregar despues una condicion que verifique si el usuario tiene alguna relacion con algo.
+            //En caso de tener una relacion, borrar con bandera, caso contrario eliminar en bd
 
             return redirect()->route('user.index')->with('success_message', $userType . ' eliminado con éxito.');
         } catch (\Throwable $th) {
