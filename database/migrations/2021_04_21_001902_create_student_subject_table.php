@@ -16,9 +16,9 @@ class CreateStudentSubjectTable extends Migration
         Schema::create('student_subject', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
-            $table->foreign('student_id')->references('id')->on('users');
+            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('subject_id');
-            $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->string('status')->default('enrolled');
             $table->timestamps();
         });
