@@ -26,6 +26,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/usuarios', [UserController::class, 'index'])->name('user.index');
+Route::get('/usuarios/nuevo', [UserController::class, 'create'])->name('user.create');
+Route::post('/usuarios/store', [UserController::class, 'store'])->name('user.store');
 Route::get('/usuarios/editar/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/usuarios/editar/{id}', [UserController::class, 'update'])->name('user.update');
 Route::post('/usuarios/eliminar', [UserController::class, 'destroy'])->name('user.destroy');

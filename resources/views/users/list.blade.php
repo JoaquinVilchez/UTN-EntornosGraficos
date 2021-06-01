@@ -5,6 +5,10 @@
       <div class="row">
           @include('elements.messages')
             <div class="col-12">
+              <div class="d-flex justify-content-between mb-2">
+                <h1>Usuarios</h1>
+                <a href="{{route('user.create')}}" class="btn btn-primary">Nuevo</a>
+              </div>
                 <table class="table table-striped">
                     <thead>
                       <tr>
@@ -33,6 +37,8 @@
                       <tr>
                     </tbody>
                   </table>
+
+                  {{ $users->links() }}
             </div>
         </div>
     </div>
