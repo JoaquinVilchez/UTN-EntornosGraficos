@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -14,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('status', 'active')->get();
+        $users = User::where('status', 'active')->paginate(10);
         return view('users.list')->with('users', $users);
     }
 
@@ -25,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -36,7 +38,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'dni' => ['required', 'string', 'size:8'],
+            'university_id' => ['required', 'string', 'max:6'],
+            'type' => 'required',
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'dni' => $request->dni,
+            'university_id' => $request->university_id,
+            'type' => $request->type,
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->route('user.index')->with('success_message', 'Usuario creado con éxito');
     }
 
     /**
@@ -71,6 +93,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'dni' => ['required', 'string', 'size:8'],
+            'university_id' => ['required', 'string', 'max:6'],
+            'type' => 'required'
+        ]);
+
         $user = User::find($id);
         $user->update([
             'first_name' => $request->first_name,
@@ -81,7 +112,7 @@ class UserController extends Controller
             'type' => $request->type,
         ]);
 
-        return redirect()->route('user.index');
+        return redirect()->route('user.index')->with('success_message', 'Usuario editado con éxito');
     }
 
     /**
@@ -96,11 +127,13 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($request->userid);
             $userType = $user->getType();
-            $user->update([
-                'status' => 'deleted'
-            ]);
-
-            // TODO: Agregar despues una condicion que verifique si el usuario tiene alguna relacion con algo. En caso de tener una relacion, borrar con bandera, caso contrario eliminar en bd
+            if ($user->subjects) {
+                $user->update([
+                    'status' => 'deleted'
+                ]);
+            } else {
+                $user->delete();
+            }
 
             return redirect()->route('user.index')->with('success_message', $userType . ' eliminado con éxito.');
         } catch (\Throwable $th) {
