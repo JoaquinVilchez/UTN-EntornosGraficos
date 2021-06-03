@@ -38,7 +38,14 @@
                         <label for="career" class="col-md-4 col-form-label text-md-right">{{ __('Carrera') }}</label>
 
                         <div class="col-md-6">
-                            <input id="career" type="text" class="form-control @error('career') is-invalid @enderror" name="career" value="{{ old('career') }}" required autocomplete="career">
+                            <select id="career" class="custom-select @error('career') is-invalid @enderror" name="career" value="{{ old('career') }}" required autocomplete="career">
+                                
+                            <option value="ISI">Ingeniería en Sistemas</option>
+                            <option value="IM">Ingeniería Mecánica</option>
+                            <option value="IQ">Ingeniería Química</option>
+                            <option value="IC">Ingeniería Civil</option>
+                            <option value="IE">Ingeniería Eléctrica</option>
+                            </select>
 
                             @error('career')
                                 <span class="invalid-feedback" role="alert">

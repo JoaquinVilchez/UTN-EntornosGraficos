@@ -37,6 +37,7 @@
                       <tr>
                     </tbody>
                   </table>
+                  {{ $subjects->links() }}
             </div>
         </div>
     </div>

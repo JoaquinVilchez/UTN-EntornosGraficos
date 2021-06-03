@@ -14,7 +14,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::all(); //Trabajamos la baja de materias como banderas
+        $subjects = Subject::paginate(10); //Trabajamos la baja de materias como banderas
        
         return view('subjects.list')->with('subjects', $subjects);
     }
@@ -37,6 +37,11 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name'=>['required','string','max:50'],
+            'level'=>['required', 'int','between:1,5'],
+            'career'=>['nullable'],
+        ]);
         
          Subject::create([
             'name' => $request->name,
@@ -82,6 +87,12 @@ class SubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name'=>['required','string','max:50'],
+            'level'=>['required', 'int','between:1,5'],
+            'career'=>['nullable'],
+        ]);
+        
         $subject = Subject::find($id);
         $subject->update([
             'name' => $request->name,
