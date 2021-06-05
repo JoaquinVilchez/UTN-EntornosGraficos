@@ -26,7 +26,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark text-white">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -80,9 +80,36 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-5">
             @yield('content')
         </main>
+
+        <footer class="fixed-bottom bg-info p-3 bg-dark text-white" >
+
+            <div class="container-fluid text-center text-md-left">
+        
+            <div class="row">
+        
+                <div class="col-md-6 mt-md-0 mt-3">
+                    <h5 class="text-uppercase">Puede interesarte:</h5>
+            
+                    <ul class="list-unstyled">
+                        <li>
+                        <a href="#!">¿Quienes somos?</a>
+                        </li>
+                        <li>
+                        <a href="#!">Contacto</a>
+                        </li>
+                        <li>
+                        <a href="#!">Mapa del sitio</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        
+            </div>
+        
+        </footer>
     </div>
 
     @yield('js-script')

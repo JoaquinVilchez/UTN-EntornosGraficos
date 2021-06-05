@@ -10,11 +10,21 @@ use PhpParser\Node\Stmt\TryCatch;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a home view of users.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
+    {
+        return view('users.home');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function list()
     {
         $users = User::where('status', 'active')->paginate(10);
         return view('users.list')->with('users', $users);
