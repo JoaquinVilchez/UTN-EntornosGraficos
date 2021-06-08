@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Subject;
@@ -23,6 +24,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/usuarios', [UserController::class, 'index'])->name('user.home');
 Route::get('/usuarios/lista', [UserController::class, 'list'])->name('user.list');

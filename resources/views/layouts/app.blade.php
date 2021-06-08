@@ -98,7 +98,7 @@
                         <a href="#!">¿Quienes somos?</a>
                         </li>
                         <li>
-                        <a href="#!">Contacto</a>
+                        <a href="{{ route('contact.index') }}">{{ __('Contacto') }}</a>
                         </li>
                         <li>
                         <a href="#!">Mapa del sitio</a>
