@@ -64,8 +64,8 @@ class UserSubjectsController extends Controller
     public function edit($id_user)
     {
         $user = User::find($id_user);
-        $subjects = $user->subjects();
-        return view('user_subjects.edit')->with('user',$user)->with('subjects',$subjects);
+        $subjectsForUser = $user->subjects();
+        return view('user_subjects.edit')->with('user',$user)->with('subjectsForUser',$subjectsForUser);
 
        
     }

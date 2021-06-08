@@ -20,10 +20,15 @@
 
                         @foreach ($subjects_for_level as $subject)
                         
-                        <div class="custom-control custom-switch">
-                            <input value="{{old('dni', $user->dni)}}" class="custom-control-input" type="checkbox" id="checkbox-id-{{$i}}" />
-                            <label class="custom-control-label" for="checkbox-id-{{$i}}">{{$subject->name}}</label>
-                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="checkbox-id-{{$i}}" 
+                            @if ($subjectsForUser->contains($subject->id))
+                            checked
+                            @endif>
+                            <label class="form-check-label" for="checkbox-id-{{$i}}">{{$subject->name}}</label>
+                          </div>
+
 
                                              
 
