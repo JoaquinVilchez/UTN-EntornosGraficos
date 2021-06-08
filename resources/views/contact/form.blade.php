@@ -4,6 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @include('elements.messages')
             <div class="card">
                 <div class="card-header">{{ __('Formulario de contacto') }}</div>
 

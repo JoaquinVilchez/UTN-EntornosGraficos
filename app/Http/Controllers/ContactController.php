@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\contactMail;
 use App\Models\User;
 use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
@@ -36,24 +37,13 @@ class ContactController extends Controller
             "email" => "required|string|min:3",
         ]);
         
-        $nombre = $_POST['name'];
-        $email = $_POST['email'];
-        $mensaje = $_POST['message'];
-        $para = 'juanschar@gmail.com';
-        $asunto = "Mail enviado desde la app de consultas";
-        $header = 'From: ' . $email;
-        $msjCorreo = "Nombre: $nombre\n E-Mail: $email\n Mensaje:\n $mensaje";
+        $name = $request->name;
+        $email = $request->email;
+        $message = $request->message;
         
-        if ($_POST['submit']) {
-            $mail = @mail($para, $asunto, $msjCorreo, $header);
-            if ($mail) {
-                echo "<script language='javascript'>
-                alert('Mensaje enviado'); location.href =history.back();
-                </script>";
-            } else {
-                echo 'Falló el envio';
-            }
-        }
+        $data = ['name'=>$name, 'message'=> $message, 'email'=>$email ];
+        Mail::to('juanperez@gmail.com')->send(new contactMail($data));
+        return redirect()->back()->with('success_message','Mail enviado correctamente');
     }
 
 }
