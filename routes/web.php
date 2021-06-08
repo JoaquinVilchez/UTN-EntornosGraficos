@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Subject;
@@ -39,3 +40,10 @@ Route::put('/materias/editar/{id}', [SubjectController::class, 'update'])->name(
 Route::post('/materias/eliminar', [SubjectController::class, 'destroy'])->name('subject.destroy');
 Route::get('/materias/nuevo', [SubjectController::class, 'create'])->name('subject.create');
 Route::post('/materias/nuevo', [SubjectController::class, 'store'])->name('subject.store');
+
+
+Route::get('/usuarios-materias/{id_user}', [UserSubjectsController::class, 'index'])->name('user_subjects.index'); //materias que da un docente
+Route::post('/usuarios-materias/eliminar', [UserSubjectsController::class, 'destroy'])->name('user_subjects.destroy');
+Route::get('/usuarios-materias/editar/{id_user}', [UserSubjectsController::class, 'edit'])->name('user_subjects.edit');
+Route::post('/usuarios-materias/editar/{id_user}', [UserSubjectsController::class, 'update'])->name('user_subjects.update');
+
