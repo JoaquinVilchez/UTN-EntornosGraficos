@@ -49,11 +49,7 @@ class User extends Authenticatable
 
     public function subjects()
     {
-        if ($this->type == 'student') {
-            return $this->belongsToMany(Subject::class, 'student_subject', 'student_id', 'subject_id');
-        } elseif ($this->type == 'teacher') {
-            return $this->belongsToMany(Subject::class, 'teacher_subject', 'teacher_id', 'subject_id');
-        }
+        return $this->BelongsToMany(Subject::class)->withPivot('role');
     }
 
     public function getFullName()
@@ -66,9 +62,36 @@ class User extends Authenticatable
         if ($this->type == 'student') {
             return 'Estudiante';
         } elseif ($this->type == 'teacher') {
-            return 'Profesor';
+            return 'Docente';
         } elseif ($this->type == 'admin') {
             return 'Administrador';
         }
     }
+
+    public function getRole($id){
+
+            
+            $role = $this->subjects()->where('subject_id', $id)->get()->pivot->role;
+            return $role;            
+        
+    }
+
+    public function getRoleSpanish($id){
+
+
+
+        if($this->getRole($id) == 'titular'){
+            $rol = 'Titular';
+            
+        }
+
+        elseif($this->getRole($id)){
+            $rol = 'Suplente';
+        }
+
+        return $rol;
+    }
+
+
+
 }

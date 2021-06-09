@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
 
-class TeacherSubjectSeeder extends Seeder
+class SubjectUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,20 +16,28 @@ class TeacherSubjectSeeder extends Seeder
      */
     public function run()
     {
-        $teachers = User::where('type', 'teacher')->get();
+        $users= User::all();
+
         $subjects = Subject::all();
         $roles = ['titular', 'alternate'];
 
         for ($i = 0; $i < count($subjects); $i++) {
 
-            $teacher = $teachers->random(1)->first();
+            $user = $users->random(1)->first();
             $subject = $subjects->random(1)->first();
-            $roles[rand(0, 1)];
+            
+            if($user->type == 'teacher'){
 
-            DB::table('teacher_subject')->insert([
-                'teacher_id' => $teacher->id,
+                $role = $roles[rand(0, 1)];
+            }
+            else if($user->type == 'student'){
+                $role = null;
+            }
+
+            DB::table('subject_user')->insert([
+                'user_id' => $user->id,
                 'subject_id' => $subject->id,
-                'role' => $roles[rand(0, 1)],
+                'role' => $role,
             ]);
         }
     }
