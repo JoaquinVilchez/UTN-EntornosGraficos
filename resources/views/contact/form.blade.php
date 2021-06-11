@@ -72,7 +72,9 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <input id="submit" type="submit" name="submit" value="Enviar" />
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Ingresar') }}
+                                </button>
                             </div>
                         </div>
                     </form>
