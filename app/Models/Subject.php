@@ -13,15 +13,15 @@ class Subject extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('role');
+        return $this->belongsToMany(User::class)->withPivot('role')->withPivot('status');
     }
 
     public function students(){
-        $this->users()->with('type', 'student');   
+        $this->users()->where('type', 'student');   
     }
 
     public function teachers(){
-        $this->users->with('type', 'teacher');
+        $this->users()->where('type', 'teacher');
     }
 
 

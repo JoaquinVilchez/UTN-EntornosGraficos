@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function subjects()
     {
-        return $this->BelongsToMany(Subject::class)->withPivot('role');
+        return $this->BelongsToMany(Subject::class)->withPivot('role')->withPivot('status');
     }
 
     public function getFullName()
@@ -68,28 +68,67 @@ class User extends Authenticatable
         }
     }
 
-    public function getRole($id){
+    public function getRole($subject_id)
+    {
 
-            
-            $role = $this->subjects()->where('subject_id', $id)->get()->pivot->role;
-            return $role;            
+        $subject = $this->subjects->where('id', $subject_id);
+        
+        $role = $subject->first()->pivot->role;
+        
+        return $role;            
         
     }
 
+
     public function getRoleSpanish($id){
-
-
-
+        
         if($this->getRole($id) == 'titular'){
             $rol = 'Titular';
             
         }
 
-        elseif($this->getRole($id)){
+        elseif($this->getRole($id) == 'alternate'){
             $rol = 'Suplente';
         }
 
         return $rol;
+    }
+
+
+    public function getStatusofSubject($subject_id)
+    {
+
+        $subject = $this->subjects->where('id', $subject_id);
+        
+        $status = $subject->first()->pivot->status;
+        
+        return $status;            
+        
+    }
+
+
+    public function getStatusofSubjectSpanish($id){
+        
+
+        $status = null;
+
+        if($this->getStatusofSubject($id) == 'approved'){
+            $status = 'Aprobado';
+        }
+
+        elseif($this->getStatusofSubject($id) == 'regular'){
+            $status = 'Regular';
+        }
+
+        elseif($this->getStatusofSubject($id) == 'enrolled'){
+            $status = 'Inscripto';
+        }
+
+        elseif($this->getStatusofSubject($id) == 'not_enrolled'){
+            $status = 'No incripto';
+        }
+
+        return $status;
     }
 
 

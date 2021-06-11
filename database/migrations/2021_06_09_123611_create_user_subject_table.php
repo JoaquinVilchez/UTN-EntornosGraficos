@@ -13,7 +13,11 @@ class CreateUserSubjectTable extends Migration
      */
     public function up()
     {
-        //se eliminan las tablas correspondientes
+
+
+
+
+        //se unifican las tablas student_subject y teacher_subject en subject_user
         Schema::dropIfExists('student_subject');
         Schema::dropIfExists('teacher_subject');
 
@@ -23,7 +27,7 @@ class CreateUserSubjectTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('subject_id');
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
-            $table->string('status')->default('enrolled');
+            $table->string('status')->nullable();
             $table->string('role')->nullable(); //titular alternate
             $table->timestamps();
         });

@@ -19,6 +19,10 @@
                         @if($user->type=='teacher')
                         <th scope="col">Rol</th>
                         @endif
+                        @if($user->type=='student')
+                        <th scope="col">Estado</th>
+                        @endif
+
                       </tr>
                     </thead>
                     <tbody>
@@ -31,6 +35,10 @@
                             @if($user->type=='teacher')
                             <td>{{$user->getRoleSpanish($subject->id)}}</td>
                             @endif
+                            @if($user->type=='student')
+                            <td>{{$user->getStatusofSubjectSpanish($subject->id)}}</td>
+                            @endif
+
                             <td></td>
                         </tr>
                     @endforeach

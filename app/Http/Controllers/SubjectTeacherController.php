@@ -78,9 +78,18 @@ class SubjectTeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $add_subjects, $delete_subjects)
+    public function update(Request $request, $user_id, $add_subjects, $edit_subjects, $delete_subjects)
     {  
-        $user = User::find('id');
+        
+
+        $added_roles = array_keys($request->input('add_subjects'));
+        $edited_roles = array_keys($request->input('edit_subjects'));
+
+
+        dd($added_roles, $edited_roles);
+        
+
+
         $user_subjects_id = array_keys($request->input('user_subjects'));
         
         $subjects = Subject::all();
@@ -157,22 +166,22 @@ class SubjectTeacherController extends Controller
 
 
     public function view_roles(Request $request, $id){
-
         
         $user = User::all()->find($id);
-        $new_subjects_id = array_keys($request->input('subjects'));
+
+        $checked_subjects_id = array_keys($request->input('subjects'));
         
         $subjects = Subject::all();
-        $new_subjects = $subjects->intersect(Subject::whereIn('subjects.id',$new_subjects_id)->get());
+        $checked_subjects = $subjects->intersect(Subject::whereIn('subjects.id',$checked_subjects_id)->get());
+        
+        
         $old_subjects = $user->subjects()->get();
+        $add_subjects = $checked_subjects->diff($old_subjects);
+        $delete_subjects = $old_subjects->diff($checked_subjects);
+        $edit_subjects = $old_subjects->intersect($checked_subjects);
 
 
-        $add_subjects = $new_subjects->diff($old_subjects); 
-        $delete_subjects = $old_subjects->diff($new_subjects);
-
-
-        return view('subjects_teacher.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('user_subjects', $new_subjects)->with('user', $user);
-
+        return view('subjects_teacher.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
 
     }
 
