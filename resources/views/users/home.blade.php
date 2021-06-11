@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container ">
-        <div class="row ">
+    <div class="container">
+        <div class="row">
             <div class="col-sm">
                 <div class="row justify-content-center">
                     <div class="card bg-secondary">
