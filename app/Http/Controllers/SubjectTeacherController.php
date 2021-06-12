@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use PhpParser\Node\Stmt\TryCatch;
 
 class SubjectTeacherController extends Controller
@@ -78,15 +79,19 @@ class SubjectTeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $user_id, $add_subjects, $edit_subjects, $delete_subjects)
+    public function update(Request $request, $user_id)
     {  
-        
+        $add_subjects = Session::get('add_subjects');
+        $edit_subjects = Session::get('edit_subjects');
+        $delete_subjects = Session::get('delete_subjects');
+
+
+        dd($add_subjects, $edit_subjects, $delete_subjects);
 
         $added_roles = array_keys($request->input('add_subjects'));
         $edited_roles = array_keys($request->input('edit_subjects'));
 
 
-        dd($added_roles, $edited_roles);
         
 
 
@@ -180,6 +185,10 @@ class SubjectTeacherController extends Controller
         $delete_subjects = $old_subjects->diff($checked_subjects);
         $edit_subjects = $old_subjects->intersect($checked_subjects);
 
+        //Es la manera correcta guardar esta informacion en sesion?
+        Session::put('add_subjects', $add_subjects);
+        Session::put('delete_subjects', $delete_subjects);
+        Session::put('edit_subjects', $edit_subjects);
 
         return view('subjects_teacher.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
 
