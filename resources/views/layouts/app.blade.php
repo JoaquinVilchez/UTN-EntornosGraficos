@@ -94,10 +94,10 @@
             
                     <ul class="list-unstyled">
                         <li>
-                        <a href="#!">¿Quienes somos?</a>
+                        <a href="{{ route('contact.aboutUs') }}">¿Quienes somos?</a>
                         </li>
                         <li>
-                        <a href="#!">Contacto</a>
+                        <a href="{{ route('contact.index') }}">{{ __('Contacto') }}</a>
                         </li>
                         <li>
                         <a href="#!">Mapa del sitio</a>
