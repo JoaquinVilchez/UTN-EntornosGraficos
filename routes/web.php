@@ -3,6 +3,7 @@
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubjectTeacherController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Subject;
@@ -25,8 +26,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+Route::view('aboutUs', 'contact.aboutUs')->name('contact.aboutUs');
 
 Route::get('/usuarios', [UserController::class, 'index'])->name('user.index');
+Route::get('/usuarios/lista', [UserController::class, 'list'])->name('user.list');
 Route::get('/usuarios/nuevo', [UserController::class, 'create'])->name('user.create');
 Route::post('/usuarios/store', [UserController::class, 'store'])->name('user.store');
 Route::get('/usuarios/editar/{id}', [UserController::class, 'edit'])->name('user.edit');
