@@ -9,7 +9,7 @@
 
                                     
                 <div class="form-group row">
-
+                
                 @foreach ($edit_subjects as $subject)
                 
                     <div class="input-group mb-3">
@@ -17,7 +17,7 @@
                           <span class="input-group-text" id="basic-addon1">{{$subject->name}}</span>
                         </div>
                         
-                        <select  id="edit_subjects[{{$subject->id}}]" class="custom-select" required>
+                        <select  id="edit_subjects[{{$subject->id}}]" name="edit_subjects[{{$subject->id}}]" class="custom-select" required>
                             <option value="titular" 
                             @if ($user->getRole($subject->id) == 'titular')
                                 selected="selected"
@@ -33,7 +33,6 @@
                     </div>
 
                 @endforeach
-
                 @foreach ($add_subjects as $subject)
                 
                     <div class="input-group mb-3">
@@ -41,7 +40,7 @@
                           <span class="input-group-text" id="basic-addon1">{{$subject->name}}</span>
                         </div>
                         
-                        <select id="add_subjects[{{$subject->id}}]" class="custom-select" required>
+                        <select id="add_subjects[{{$subject->id}}]" name="add_subjects[{{$subject->id}}]" class="custom-select" required>
                             <option value="titular" selected="selected">Titular</option>
                             <option value="alternate">Suplente</option>
                         </select>

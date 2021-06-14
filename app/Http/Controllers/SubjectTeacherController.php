@@ -81,53 +81,61 @@ class SubjectTeacherController extends Controller
      */
     public function update(Request $request, $user_id)
     {  
-        $add_subjects = Session::get('add_subjects');
-        $edit_subjects = Session::get('edit_subjects');
-        $delete_subjects = Session::get('delete_subjects');
-
-
-        dd($add_subjects, $edit_subjects, $delete_subjects);
-
-        $added_roles = array_keys($request->input('add_subjects'));
-        $edited_roles = array_keys($request->input('edit_subjects'));
-
+        
+        $user = User::find($user_id);
+        $add_subjects = $request->session()->pull('add_subjects', 'default');
+        $edit_subjects = $request->session()->pull('edit_subjects', 'default');
+        $delete_subjects = $request->session()->pull('delete_subjects', 'default');
 
         
-
-
-        $user_subjects_id = array_keys($request->input('user_subjects'));
-        
-        $subjects = Subject::all();
-        $user_subjects = $subjects->intersect(Subject::whereIn('subjects.id',$user_subjects_id)->get());
-
+        $edited_roles = $request->input('edit_subjects');
+        $added_roles = $request->input('add_subjects');
 
         $ok = true;
 
-        try {
 
-            /* Agregar nuevas relaciones de usuarios materias */
+
+        try{
+            
+            /* Agregar relaciones de usuarios materias */
             foreach ($add_subjects as $subject) {
-                
-                if($user->type == 'teacher'){
-                    
-                    
+
+                $role = $added_roles[$subject->id];
+
+                if($user->type == 'teacher'){                    
                     DB::table('subject_user')->insert([
                         'user_id'=>$user->id,
                         'subject_id'=>$subject->id,
-                        'role'=> 'titular'
+                        'role'=> $role
                     ]);
-
-                
+                }
             }
-
-
-        }
-    
-            
         }catch (\Throwable $th) {
             $ok = false;
         }
 
+        try{
+
+            /* Editar relaciones de usuarios materias */
+
+            foreach ($edit_subjects as $subject) {
+
+                $role = $edited_roles[$subject->id];
+
+                if($user->type == 'teacher'){
+                    
+                    
+                    DB::table('subject_user')->where('user_id', $user->id)->where('subject_id', $subject->id)->update([
+                        'user_id'=>$user->id,
+                        'subject_id'=>$subject->id,
+                        'role'=> $role
+                    ]);
+
+                }
+            }
+        }catch (\Throwable $th) {
+            $ok = false;
+        }
 
         try{
 
@@ -140,21 +148,18 @@ class SubjectTeacherController extends Controller
                 
             }
         }
-            return redirect()->route('subjects_teacher.index', $user->id)->with('success_message', "Se agregaron las siguientes materias seleccionadas para el usuario determinado");
 
         }catch (\Throwable $th) {
             $ok = false;
         }
 
         if($ok){
-            return redirect()->route('subjects_teacher.index', $user->id)->with('success_message', "Se agregaron y/o quitaron las materias seleccionadas para el usuario determinado");   
+            return redirect()->route('subjects_teacher.index', $user->id)->with('success_message', "Se actualizaron satisfactoriamente las materias seleccionadas para el usuario determinado");   
         }
 
         return redirect()->route('subjects_teacher.edit', $user->id)->with('error_message', "Hubo un problema y no se agregaron ni quitaron las materias para el usuario determinado.{$th}");
 
-        
-
-
+    
     }
 
     /**
@@ -164,34 +169,68 @@ class SubjectTeacherController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(Request $request)
+    public function destroy($user_id)
     {
+        $user = User::findOrFail($user_id);
+
+        try{
+
+            if($user->type == 'teacher'){
+
+                DB::table('subject_user')->where('user_id', $user_id)->delete();                
+            }
+
+            /*HAY ERROR EN ESTA LINEA NO SE PORQUE */
+            return redirect()->route('subjects_teacher.index', $user_id)->with('success_message', "Se eliminaron satisfactoriamente las materias seleccionadas para el usuario determinado");
+
+        }catch (\Throwable $th) {
+            return redirect()->route('subjects_teacher.edit', $user_id)->with('error_message', "Hubo un problema y no se agregaron eliminaron las materias para el usuario determinado.{$th}");
+        }
       
     }
 
 
     public function view_roles(Request $request, $id){
         
-        $user = User::all()->find($id);
 
-        $checked_subjects_id = array_keys($request->input('subjects'));
-        
-        $subjects = Subject::all();
-        $checked_subjects = $subjects->intersect(Subject::whereIn('subjects.id',$checked_subjects_id)->get());
-        
-        
-        $old_subjects = $user->subjects()->get();
-        $add_subjects = $checked_subjects->diff($old_subjects);
-        $delete_subjects = $old_subjects->diff($checked_subjects);
-        $edit_subjects = $old_subjects->intersect($checked_subjects);
+        /*Si no hay materias marcadas en el checkbox, se eliminan las materias directamente, evitando el update */
+        if($request->input('subjects') == null){
 
-        //Es la manera correcta guardar esta informacion en sesion?
-        Session::put('add_subjects', $add_subjects);
-        Session::put('delete_subjects', $delete_subjects);
-        Session::put('edit_subjects', $edit_subjects);
+            $this->destroy($id);
+        }
 
-        return view('subjects_teacher.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
+        else
+        {
 
+            $user = User::all()->find($id);
+            $checked_subjects = array();
+            $checked_subjects_id = array_keys($request->input('subjects'));
+    
+            $subjects = Subject::all();
+            $old_subjects = $user->subjects()->get();
+            $checked_subjects = $subjects->intersect(Subject::whereIn('subjects.id',$checked_subjects_id)->get());
+            $add_subjects = $checked_subjects->diff($old_subjects)->unique();
+            $edit_subjects = $old_subjects->intersect($checked_subjects)->unique();
+    
+            
+            
+            
+            $delete_subjects = $old_subjects->diff($checked_subjects)->unique();
+    
+    
+            //Es la manera correcta guardar esta informacion en sesion?
+               
+    
+            $request->session()->put('delete_subjects', $delete_subjects);
+            $request->session()->put('add_subjects', $add_subjects);
+            $request->session()->put('edit_subjects', $edit_subjects);
+    
+            return view('subjects_teacher.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
+    
+
+        }
+
+      
     }
 
 
