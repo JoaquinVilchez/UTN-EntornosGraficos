@@ -7,7 +7,7 @@
             <div class="col-12">
               <div class="d-flex justify-content-between mb-2">
                 <h1>Materias para el {{strtolower($user->getType())}} {{$user->getFullName()}}</h1>
-                <a href="{{ route('subjects_teacher.edit', $user->id) }}">Ir a editar</a>
+                <a href="{{ route('subjects_user.edit', $user->id) }}">Ir a editar</a>
               </div>
                 <table class="table table-striped">
                     <thead>

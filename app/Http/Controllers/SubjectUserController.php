@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use PhpParser\Node\Stmt\TryCatch;
 
-class SubjectTeacherController extends Controller
+class SubjectUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,7 +24,7 @@ class SubjectTeacherController extends Controller
         $subjects = $user->subjects()->paginate(10);
 
         
-        return view('subjects_teacher.list')->with('subjects', $subjects)->with('user',$user);
+        return view('subjects_user.list')->with('subjects', $subjects)->with('user',$user);
     }
 
     /**
@@ -68,7 +68,7 @@ class SubjectTeacherController extends Controller
     public function edit($id_user)
     {
         $user = User::all()->find($id_user);
-        return view('subjects_teacher.edit')->with('user', $user);
+        return view('subjects_user.edit')->with('user', $user);
        
     }
 
@@ -88,8 +88,8 @@ class SubjectTeacherController extends Controller
         $delete_subjects = $request->session()->pull('delete_subjects', 'default');
 
         
-        $edited_roles = $request->input('edit_subjects');
-        $added_roles = $request->input('add_subjects');
+        $edited_pivot = $request->input('edit_subjects');
+        $added_pivot = $request->input('add_subjects');
 
         $ok = true;
 
@@ -100,17 +100,26 @@ class SubjectTeacherController extends Controller
             /* Agregar relaciones de usuarios materias */
             foreach ($add_subjects as $subject) {
 
-                $role = $added_roles[$subject->id];
+                $pivot = $added_pivot[$subject->id];
 
                 if($user->type == 'teacher'){                    
                     DB::table('subject_user')->insert([
                         'user_id'=>$user->id,
                         'subject_id'=>$subject->id,
-                        'role'=> $role
+                        'role'=> $pivot
                     ]);
                 }
+                if($user->type == 'student'){                    
+                    DB::table('subject_user')->insert([
+                        'user_id'=>$user->id,
+                        'subject_id'=>$subject->id,
+                        'status'=> $pivot
+                    ]);
+
             }
-        }catch (\Throwable $th) {
+        } }
+        
+        catch (\Throwable $th) {
             $ok = false;
         }
 
@@ -120,7 +129,7 @@ class SubjectTeacherController extends Controller
 
             foreach ($edit_subjects as $subject) {
 
-                $role = $edited_roles[$subject->id];
+                $pivot = $edited_pivot[$subject->id];
 
                 if($user->type == 'teacher'){
                     
@@ -128,10 +137,20 @@ class SubjectTeacherController extends Controller
                     DB::table('subject_user')->where('user_id', $user->id)->where('subject_id', $subject->id)->update([
                         'user_id'=>$user->id,
                         'subject_id'=>$subject->id,
-                        'role'=> $role
+                        'role'=> $pivot
                     ]);
 
                 }
+                if($user->type == 'student'){
+                    
+                    DB::table('subject_user')->where('user_id', $user->id)->where('subject_id', $subject->id)->update([
+                        'user_id'=>$user->id,
+                        'subject_id'=>$subject->id,
+                        'status'=> $pivot
+                    ]);
+
+                }
+
             }
         }catch (\Throwable $th) {
             $ok = false;
@@ -142,22 +161,21 @@ class SubjectTeacherController extends Controller
             /* Eliminar relaciones de usuarios materias */
             foreach ($delete_subjects as $subject) {
                 
-                if($user->type == 'teacher'){
+            
 
                 DB::table('subject_user')->where('subject_id',$subject->id)->where('user_id', $user->id)->delete();
                 
             }
-        }
 
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             $ok = false;
         }
 
         if($ok){
-            return redirect()->route('subjects_teacher.index', $user->id)->with('success_message', "Se actualizaron satisfactoriamente las materias seleccionadas para el usuario determinado");   
+            return redirect()->route('subjects_user.index', $user->id)->with('success_message', "Se actualizaron satisfactoriamente las materias seleccionadas para el usuario determinado");   
         }
 
-        return redirect()->route('subjects_teacher.edit', $user->id)->with('error_message', "Hubo un problema y no se agregaron ni quitaron las materias para el usuario determinado.{$th}");
+        return redirect()->route('subjects_user.edit', $user->id)->with('error_message', "Hubo un problema y no se agregaron ni quitaron las materias para el usuario determinado.{$th}");
 
     
     }
@@ -175,22 +193,16 @@ class SubjectTeacherController extends Controller
 
         try{
 
-            if($user->type == 'teacher'){
-
-                DB::table('subject_user')->where('user_id', $user_id)->delete();                
-            }
-
-            /*HAY ERROR EN ESTA LINEA NO SE PORQUE */
-            return redirect()->route('subjects_teacher.index', $user_id)->with('success_message', "Se eliminaron satisfactoriamente las materias seleccionadas para el usuario determinado");
-
+          DB::table('subject_user')->where('user_id', $user_id)->delete();                
+                
         }catch (\Throwable $th) {
-            return redirect()->route('subjects_teacher.edit', $user_id)->with('error_message', "Hubo un problema y no se agregaron eliminaron las materias para el usuario determinado.{$th}");
+            return redirect()->route('subjects_user.edit', $user_id)->with('error_message', "Hubo un problema y no se agregaron eliminaron las materias para el usuario determinado.{$th}");
         }
-      
+        return redirect()->route('subjects_user.index', $user_id)->with('success_message', "Se eliminaron satisfactoriamente las materias seleccionadas para el usuario determinado");
     }
 
 
-    public function view_roles(Request $request, $id){
+    public function view_roles_and_status(Request $request, $id){
         
 
         /*Si no hay materias marcadas en el checkbox, se eliminan las materias directamente, evitando el update */
@@ -224,8 +236,22 @@ class SubjectTeacherController extends Controller
             $request->session()->put('delete_subjects', $delete_subjects);
             $request->session()->put('add_subjects', $add_subjects);
             $request->session()->put('edit_subjects', $edit_subjects);
+
+            
+
+            if ($user->type =='teacher')
+            {
+                return view('subjects_user.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
     
-            return view('subjects_teacher.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
+            }
+            if ($user->type =='student')
+
+            {
+                return view('subjects_user.view_status')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects',$edit_subjects)->with('user', $user);
+    
+            }
+    
+           
     
 
         }

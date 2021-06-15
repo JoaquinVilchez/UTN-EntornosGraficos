@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SubjectTeacherController;
+use App\Http\Controllers\SubjectUserController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -47,8 +47,8 @@ Route::get('/materias/nuevo', [SubjectController::class, 'create'])->name('subje
 Route::post('/materias/nuevo', [SubjectController::class, 'store'])->name('subject.store');
 
 
-Route::get('/materias-docente/{id_user}', [SubjectTeacherController::class, 'index'])->name('subjects_teacher.index'); //materias que da un docente
-Route::get('/materias-docente/editar/{id_user}', [SubjectTeacherController::class, 'edit'])->name('subjects_teacher.edit');
-Route::post('/materias-docente/editar/{id_user}', [SubjectTeacherController::class, 'update'])->name('subjects_teacher.update');
-Route::get('/materias-docente/editar/{id_user}/roles', [SubjectTeacherController::class, 'view_roles'])->name('subjects_teacher.view_roles');
+Route::get('/materias-usuario/{id_user}', [SubjectUserController::class, 'index'])->name('subjects_user.index'); //materias que da un docente
+Route::get('/materias-usuario/editar/{id_user}', [SubjectUserController::class, 'edit'])->name('subjects_user.edit');
+Route::post('/materias-usuario/editar/{id_user}', [SubjectUserController::class, 'update'])->name('subjects_user.update');
+Route::get('/materias-usuario/editar/{id_user}/roles', [SubjectUserController::class, 'view_roles_and_status'])->name('subjects_user.view_roles_and_status');
 

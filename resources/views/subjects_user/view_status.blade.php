@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form method="POST" action="{{ route('subjects_teacher.update', $user->id) }}">
+            <form method="POST" action="{{ route('subjects_user.update', $user->id) }}">
                 @csrf
 
                                     
@@ -18,16 +18,21 @@
                         </div>
                         
                         <select  id="edit_subjects[{{$subject->id}}]" name="edit_subjects[{{$subject->id}}]" class="custom-select" required>
-                            <option value="titular" 
-                            @if ($user->getRole($subject->id) == 'titular')
+                            <option value="enrolled" 
+                            @if ($user->getStatusofSubject($subject->id) == 'enrolled')
                                 selected="selected"
-                            @endif >Titular</option>
+                            @endif >Inscripto</option>
 
 
-                            <option value="alternate"
-                            @if ($user->getRole($subject->id) == 'alternate')
+                            <option value="regular"
+                            @if ($user->getStatusofSubject($subject->id) == 'regular')
                                 selected="selected"
-                            @endif >Suplente</option>
+                            @endif >Regular</option>
+
+                            <option value="approved" 
+                            @if ($user->getStatusofSubject($subject->id) == 'approved')
+                                selected="selected"
+                            @endif >Aprobado</option>
                         </select>
   
                     </div>
@@ -41,8 +46,9 @@
                         </div>
                         
                         <select id="add_subjects[{{$subject->id}}]" name="add_subjects[{{$subject->id}}]" class="custom-select" required>
-                            <option value="titular" selected="selected">Titular</option>
-                            <option value="alternate">Suplente</option>
+                            <option value="enrolled" selected="selected">Inscripto</option>
+                            <option value="regular">Regular</option>
+                            <option value="approved">Aprobado</option>
                         </select>
   
                     </div>

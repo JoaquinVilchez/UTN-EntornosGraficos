@@ -8,7 +8,7 @@
                   <div class="col-12">
                     <div class="d-flex justify-content-between mb-2">
 
-                        <form method="GET" action="{{ route('subjects_teacher.view_roles', $user->id) }}">
+                        <form method="GET" action="{{ route('subjects_user.view_roles_and_status', $user->id) }}">
                             @csrf
                             
                             @if ($user->type == 'teacher')
