@@ -189,16 +189,7 @@ class SubjectUserController extends Controller
 
     public function destroy($user_id)
     {
-        $user = User::findOrFail($user_id);
-
-        try{
-
-          DB::table('subject_user')->where('user_id', $user_id)->delete();                
-                
-        }catch (\Throwable $th) {
-            return redirect()->route('subjects_user.edit', $user_id)->with('error_message', "Hubo un problema y no se agregaron eliminaron las materias para el usuario determinado.{$th}");
-        }
-        return redirect()->route('subjects_user.index', $user_id)->with('success_message', "Se eliminaron satisfactoriamente las materias seleccionadas para el usuario determinado");
+       
     }
 
 
@@ -208,13 +199,22 @@ class SubjectUserController extends Controller
         /*Si no hay materias marcadas en el checkbox, se eliminan las materias directamente, evitando el update */
         if($request->input('subjects') == null){
 
-            $this->destroy($id);
+            try{
+
+                DB::table('subject_user')->where('user_id', $id)->delete();
+                return redirect()->route('subjects_user.index', $id)->with('success_message', "Se eliminaron satisfactoriamente las materias seleccionadas para el usuario determinado");
+                      
+              }catch (\Throwable $th) {
+      
+                  dd('mal');
+                  return redirect()->route('subjects_user.edit', $id)->with('error_message', "Hubo un problema y no se agregaron eliminaron las materias para el usuario determinado.{$th}");
+              }
         }
 
         else
         {
 
-            $user = User::all()->find($id);
+            $user = User::find($id);
             $checked_subjects = array();
             $checked_subjects_id = array_keys($request->input('subjects'));
     

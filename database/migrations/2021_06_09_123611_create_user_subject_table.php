@@ -27,7 +27,7 @@ class CreateUserSubjectTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('subject_id');
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
-            $table->string('status')->nullable();
+            $table->string('status')->nullable(); //enrolled regular approved
             $table->string('role')->nullable(); //titular alternate
             $table->timestamps();
         });
