@@ -84,7 +84,7 @@
             @yield('content')
         </main>
 
-        <footer class="fixed-bottom bg-info p-3 bg-dark text-white" >
+        <footer class="bg-info p-3 bg-dark text-white" >
 
             <div class="container-fluid text-center text-md-left">
             <div class="row">
