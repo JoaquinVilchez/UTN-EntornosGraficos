@@ -21,31 +21,36 @@ class SubjectUserSeeder extends Seeder
 
         $subjects = Subject::all();
         $roles = ['titular', 'alternate'];
-        $conditions = ['not_enrolled','enrolled', 'regular', 'approved']; 
+        $conditions = ['enrolled', 'regular', 'approved']; 
 
-        for ($i = 0; $i < 500; $i++) {
+        foreach($subjects as $subject){
 
-            $user = $users->random(1)->first();
-            $subject = $subjects->random(1)->first();
-            $role = null;
+            for ($i = 0; $i < 10; $i++) {
 
-            
-            if($user->type == 'teacher'){
+                $user = $users->random(1)->first();
+                $role = null;
 
-                $role = $roles[rand(0, 1)];
-                $condition = null;
-            }
-            else if($user->type == 'student'){
-                $condition = $conditions[rand(0,3)];   
+                if($user->type == 'teacher'){
+
+                    $role = $roles[rand(0, 1)];
+                    $condition = null;
+                }
                 
+                if($user->type == 'student'){
+                    $condition = $conditions[rand(0,2)];   
+                    
+                }
+
+                DB::table('subject_user')->insert([
+                    'user_id' => $user->id,
+                    'subject_id' => $subject->id,
+                    'role' => $role,
+                    'status' =>$condition,
+                ]);
             }
 
-            DB::table('subject_user')->insert([
-                'user_id' => $user->id,
-                'subject_id' => $subject->id,
-                'role' => $role,
-                'status' =>$condition,
-            ]);
+
         }
+
     }
 }

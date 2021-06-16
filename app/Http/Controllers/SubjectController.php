@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use Illuminate\Http\Request;
-use DateTime;
 
 class SubjectController extends Controller
 {
@@ -15,14 +14,8 @@ class SubjectController extends Controller
      */
     public function index()
     { 
-        for ($i=0; $i<=10; $i++){
-        $subject = Subject::all()->random(1)->first();
-        
-        $teacher = $subject->users();
-        dd($teacher);
-        $teachers[$i] = $teacher;
-        }
-        dd($teachers);
+
+
         $subjects = Subject::paginate(10); //Trabajamos la baja de materias como banderas
        
         return view('subjects.list')->with('subjects', $subjects);

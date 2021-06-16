@@ -17,11 +17,11 @@ class Subject extends Model
     }
 
     public function students(){
-        $this->users()->where('type', 'student');   
+        return $this->users->where('type', 'student');   
     }
 
     public function teachers(){
-        $this->users()->where('type', 'teacher');
+        return $this->users->where('type', 'teacher');
     }
 
 
