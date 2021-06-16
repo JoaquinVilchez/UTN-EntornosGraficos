@@ -23,7 +23,7 @@ class SubjectUserSeeder extends Seeder
         $roles = ['titular', 'alternate'];
         $conditions = ['not_enrolled','enrolled', 'regular', 'approved']; 
 
-        for ($i = 0; $i < count($subjects); $i++) {
+        for ($i = 0; $i < 500; $i++) {
 
             $user = $users->random(1)->first();
             $subject = $subjects->random(1)->first();
