@@ -24,5 +24,11 @@ class Subject extends Model
         return $this->users->where('type', 'teacher');
     }
 
+    public function meetings(){
+
+        return $this->hasMany(Meeting::class);
+
+    }
+
 
 }

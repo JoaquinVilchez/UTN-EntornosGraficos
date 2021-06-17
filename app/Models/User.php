@@ -42,7 +42,7 @@ class User extends Authenticatable
         return $this->HasMany(Inscription::class);
     }
 
-    public function meeting()
+    public function meetings()
     {
         return $this->hasMany(Meeting::class);
     }

@@ -13,15 +13,15 @@ class Meeting extends Model
 
     public function subject()
     {
-        return $this->hasOne(Subject::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function teacher()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'profesor_id');
     }
 
-    public function inscription()
+    public function inscriptions()
     {
         return $this->hasMany(Inscription::class);
     }
