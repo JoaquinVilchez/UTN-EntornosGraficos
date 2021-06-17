@@ -20,4 +20,29 @@ class Inscription extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getState()
+    {
+        $state = $this->state;
+
+        if($state == 'enrolled'){
+            return 'Inscripto';
+        }
+        
+        if($state == 'canceled'){
+            return 'Cancelado';
+        }
+
+        if($state == 'attended'){
+            return 'Asistido';
+        }
+
+        if($state == 'not_attended'){
+            return 'Ausente';
+        }
+
+        
+
+    }
+
 }

@@ -26,6 +26,26 @@ class Meeting extends Model
         return $this->hasMany(Inscription::class);
     }
 
+    public function getState()
+    {
+        $state = $this->state;
+
+        if($state == 'canceled'){
+            return 'Cancelado';
+        }
+        
+        if($state == 'confirmed'){
+            return 'Confirmado';
+        }
+
+        if($state == 'pending'){
+            return 'Pendiente';
+        }
+
+        
+
+    }
+
 
     // $consulta = Meeting::find(1);
 
