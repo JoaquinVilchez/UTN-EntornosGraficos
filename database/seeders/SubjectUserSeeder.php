@@ -17,7 +17,8 @@ class SubjectUserSeeder extends Seeder
     public function run()
     {
 
-        $users= User::all();
+        $teachers= User::all()->where('type', 'teacher');
+        $students= User::all()->where('type', 'student'); 
 
         $subjects = Subject::all();
         $roles = ['titular', 'alternate'];
@@ -25,21 +26,13 @@ class SubjectUserSeeder extends Seeder
 
         foreach($subjects as $subject){
 
-            for ($i = 0; $i < 10; $i++) {
+            //Se insertan docentes para la materia
+            for ($i = 0; $i < 1; $i++) {
 
-                $user = $users->random(1)->first();
-                $role = null;
+                $user = $teachers->random(1)->first();
+                $role = $roles[rand(0, 1)];
+                $condition = null;
 
-                if($user->type == 'teacher'){
-
-                    $role = $roles[rand(0, 1)];
-                    $condition = null;
-                }
-                
-                if($user->type == 'student'){
-                    $condition = $conditions[rand(0,2)];   
-                    
-                }
 
                 DB::table('subject_user')->insert([
                     'user_id' => $user->id,
@@ -47,6 +40,23 @@ class SubjectUserSeeder extends Seeder
                     'role' => $role,
                     'status' =>$condition,
                 ]);
+            }
+
+            //Se insertan alumnos para la materia
+            for($i=0; $i<3; $i++){
+
+                $user = $students->random(1)->first();
+                $role = null;
+                $condition = $conditions[rand(0,2)];   
+
+
+                DB::table('subject_user')->insert([
+                    'user_id' => $user->id,
+                    'subject_id' => $subject->id,
+                    'role' => $role,
+                    'status' =>$condition,
+                ]);
+
             }
 
 

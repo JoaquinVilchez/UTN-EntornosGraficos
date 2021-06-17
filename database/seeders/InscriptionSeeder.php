@@ -26,11 +26,10 @@ class InscriptionSeeder extends Seeder
            $subject = Subject::find($meeting->subject_id);
            $students = $subject->students();
            $student = $students->random(1)->first();
-           $cant_inscriptions_for_meeting = rand(0,5);
 
-            for ($i=0; $i<=$cant_inscriptions_for_meeting; $i++){
+           foreach ($students as $student){
                 $state = $states[rand(0,3)];
-                
+                    
                 Inscription::create([
                     'state' => $state,
                     'meeting_id' => $meeting->id,
@@ -40,7 +39,7 @@ class InscriptionSeeder extends Seeder
 
                 ]);
 
-            }
+           }
         }
 
         
