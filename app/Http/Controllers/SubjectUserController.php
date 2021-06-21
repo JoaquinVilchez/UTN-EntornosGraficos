@@ -279,16 +279,16 @@ class SubjectUserController extends Controller
             return view('subjects_user.view_teacher_subjects')->with('subjects', $subjects)->with('user',$user);   
         }
         else{
-            
             return redirect()->route('subjects_user.view_teacher_subjects', $id_user)->with('success_message', 'No es profesor.'); //ver linea, esta mal.
          }
-        
-        
-         
-    
-
     }
 
+    public function view_subjects_meeting($id_subject)
+    {
+        $subject = Subject::find($id_subject);
+        $teachers = $subject->teachers()->unique();
+        return view('subjects_user.view_subjects_meeting')->with('subject', $subject)->with('teachers', $teachers);
+    }
 
 
 

@@ -6,34 +6,44 @@
           @include('elements.messages')
             <div class="col-12">
               <div class="card d-flex justify-content-between mb-2">
-                <h1 class="card-header">Docente: {{$user->getFullName()}}</h1>
-
+                <h1 class="card-header">Materia: {{$subject->name}}</h1>
+                <div class="card-body">
+                  <p class="card-text">
+                    Año: {{$subject->level}} <br>
+                    Carrera: {{$subject->career}}
+                  </p>
+                </div>
               </div>
               
               <br>
               <div class="d-flex justify-content-between mb-2">
-              <h3>Materias</h3>
+              <h3>Docentes</h3>
               </div>
                 <table class="table table-striped">
                     <thead>
                       <tr>
-                        <th scope="col">Año</th>
-                        <th scope="col">Carrera</th>
+                        <th scope="col">DNI</th>
+                        <th scope="col">Legajo</th>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Rol</th>
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($subjects as $subject)
+                    @foreach ($teachers as $user)
                         <tr>
-                            <td>{{$subject->level}}</td>
-                            <td>{{$subject->career}}</td>
-                            <td>{{$subject->name}}</td>
+                            <td>{{$user->dni}}</td>
+                            <td>{{$user->university_id}}</td>
+                            <td>{{$user->getFullName()}}</td>
+                            <td>{{$user->getRoleSpanish($subject->id)}}</td>
                             <td><a href="#" class="btn btn-primary">Ver disponibilidad</a></td>
                         </tr>
                     @endforeach
                       <tr>
                     </tbody>
                   </table>
+
+                  <br>
+              
             </div>
         </div>
     </div>
