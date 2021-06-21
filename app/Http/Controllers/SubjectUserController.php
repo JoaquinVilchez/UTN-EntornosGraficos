@@ -269,6 +269,26 @@ class SubjectUserController extends Controller
 
     }
 
+    public function view_teacher_subjects($id_user)
+    {
+        $user = User::find($id_user);
+        $userType = $user->getType();
+        if ($userType == 'Docente')
+        {
+            $subjects = $user->subjects()->paginate(10);
+            return view('subjects_user.view_teacher_subjects')->with('subjects', $subjects)->with('user',$user);   
+        }
+        else{
+            
+            return redirect()->route('subjects_user.view_teacher_subjects', $id_user)->with('success_message', 'No es profesor.'); //ver linea, esta mal.
+         }
+        
+        
+         
+    
+
+    }
+
 
 
 

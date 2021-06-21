@@ -58,4 +58,6 @@ Route::get('/datos-materia/{id}',  [SubjectUserController::class, 'view_subjects
 
 Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('subjects_user.index');
 
+Route::get('/materias-docente/{id_user}', [SubjectUserController::class, 'view_teacher_subjects'])->name('subjects_user.view_teacher_subjects');
+
 
