@@ -87,27 +87,24 @@
         <footer class="bg-info p-3 bg-dark text-white" >
 
             <div class="container-fluid text-center text-md-left">
-            <div class="row">
-        
-                <div class="col-md-6 mt-md-0 mt-3">
-                    <h5 class="text-uppercase">Puede interesarte:</h5>
-            
-                    <ul class="list-unstyled">
-                        <li>
-                        <a href="{{ route('contact.aboutUs') }}">¿Quienes somos?</a>
-                        </li>
-                        <li>
-                        <a href="{{ route('contact.index') }}">{{ __('Contacto') }}</a>
-                        </li>
-                        <li>
-                        <a href="#!">Mapa del sitio</a>
-                        </li>
-                    </ul>
+                <div class="row">
+                    <div class="col-md-6 mt-md-0 mt-3">
+                        <h5 class="text-uppercase">Puede interesarte:</h5>
+                
+                        <ul class="list-unstyled">
+                            <li>
+                            <a href="{{ route('contact.aboutUs') }}">¿Quienes somos?</a>
+                            </li>
+                            <li>
+                            <a href="{{ route('contact.index') }}">{{ __('Contacto') }}</a>
+                            </li>
+                            <li>
+                            <a href="#!">Mapa del sitio</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        
-            </div>
-        
         </footer>
     </div>
 

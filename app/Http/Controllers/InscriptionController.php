@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Date;
 
 class InscriptionController extends Controller
 {
-
     public function index($user_id)
     { 
         $user = User::find($user_id);
@@ -48,13 +47,12 @@ class InscriptionController extends Controller
         {
             return redirect()->route('inscription.index', $inscription->student->id)->with('error_message', 'Hubo un error al intentar cancelar la inscripción.');
         }
-
         
+    }
 
-
-
-
-        
+    public function list()
+    {
+        return view('inscriptions_user.list');
     }
 
 }
