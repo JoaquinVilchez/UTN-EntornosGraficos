@@ -80,7 +80,7 @@
             </div>
         </nav>
 
-        <main class="py-5 vw-100">
+        <main class="py-5">
             @yield('content')
         </main>
 

@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="container">
+    <div class="container vh-100">
       <div class="row">
           @include('elements.messages')
             <div class="col-12">
