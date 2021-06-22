@@ -62,5 +62,6 @@ Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'in
 Route::get('/materias-consultas/{id_subject}', [SubjectUserController::class, 'view_subjects_meeting'])->name('subjects_user.view_subjects_meeting');
 
 Route::get('/buscador-docente', [SubjectUserController::class, 'search_teacher'])->name('users.search_teacher');
+Route::post('/inscripciones-alumno/cancelar/', [InscriptionController::class, 'cancel'])->name('inscription.cancel');
 
 

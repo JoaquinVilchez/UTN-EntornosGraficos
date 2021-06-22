@@ -35,7 +35,7 @@
                             <td>{{$inscription->getState()}}</td>
                             <td>
                               @if($inscription->meeting->state == 'pending' && $inscription->state == 'enrolled')
-                                <a href="#" type="button" class="btn btn-danger">Cancelar</a>
+                                <a href="#" data-toggle="modal" data-target="#deleteModal" data-inscriptionid="{{$inscription->id}}" type="button" class="btn btn-danger">Cancelar</a>
                               @endif
                             </td>         
                            
@@ -49,5 +49,42 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Cancelar inscripción</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <form action="{{route('inscription.cancel')}}" method="POST">
+          @csrf
+            <div class="modal-body">
+                <input type="hidden" value="" id="inscriptionid" name="inscriptionid">
+                ¿Estás seguro de cancelar la inscripción a esta consulta?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  @endsection
+
+@section('js-script')
+<script>
+
+  $('#deleteModal').on('show.bs.modal', function(event){
+    var button = $(event.relatedTarget)
+
+    var inscriptionid = button.data('inscriptionid')
+    var modal = $(this)
+    modal.find('.modal-body #inscriptionid').val(inscriptionid)
+  });
+</script>
 
 @endsection
