@@ -131,6 +131,11 @@ class User extends Authenticatable
         return $status;
     }
 
+   
+
+    
+    
+
 
 
 }
