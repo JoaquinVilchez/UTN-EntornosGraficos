@@ -24,7 +24,7 @@
                 </div>
                 <div class="row justify-content-center">
                 <div class="d-flex flex-column p-2">
-                    <button type="button" class="btn btn-primary m-2">Mis consultas</button>
+                    <a href="{{route('inscriptions_user.list')}}" class="btn btn-primary">Mis Consultas</a>
                     <button type="button" class="btn btn-primary m-2">Nueva consulta</button>
                     <button type="button" class="btn btn-primary m-2">Salir</button>
                 </div>

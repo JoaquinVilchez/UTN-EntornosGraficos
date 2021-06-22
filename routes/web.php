@@ -56,6 +56,7 @@ Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destr
 
 Route::get('/datos-materia/{id}',  [SubjectUserController::class, 'view_subjects_info'])->name('subjects_user.view_subjects_info');
 
-Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('subjects_user.index');
+Route::get('/inscripciones/{id_user}', [InscriptionController::class, 'index'])->name('inscriptions_user.index');
+Route::get('/inscripciones', [InscriptionController::class, 'list'])->name('inscriptions_user.list');
 
 
