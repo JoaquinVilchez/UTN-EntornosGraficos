@@ -289,13 +289,18 @@ class SubjectUserController extends Controller
 
     }
 
-    public function view_subjects_meeting($id_subject)
+    public function view_subjects_for_teacher($id_subject)
     {
         $subject = Subject::find($id_subject);
         $teachers = $subject->teachers()->unique();
         return view('subjects_user.view_subjects_meeting')->with('subject', $subject)->with('teachers', $teachers);
     }
-
-
-
+    
+    public function search_teacher(Request $request)
+   {  
+       $name = $request->get('name');
+       $users = User::orderBy('id')->where('type', 'teacher')->where('type','teacher')->where('status','active')->where('first_name', 'LIKE', "%$name%")->paginate(20);
+       return view ('users.search_teacher')->with('users', $users);
+   }
+   
 }

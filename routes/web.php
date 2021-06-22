@@ -56,9 +56,11 @@ Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destr
 
 Route::get('/datos-materia/{id}',  [SubjectUserController::class, 'view_subjects_info'])->name('subjects_user.view_subjects_info');
 
-Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('subjects_user.index');
+Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('inscriptions_user.list');
 
-Route::get('/materias-docente/{id_user}', [SubjectUserController::class, 'view_teacher_subjects'])->name('subjects_user.view_teacher_subjects');
+
 Route::get('/materias-consultas/{id_subject}', [SubjectUserController::class, 'view_subjects_meeting'])->name('subjects_user.view_subjects_meeting');
+
+Route::get('/buscador-docente', [SubjectUserController::class, 'search_teacher'])->name('users.search_teacher');
 
 
