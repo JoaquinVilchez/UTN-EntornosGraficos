@@ -1,26 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container vh-100">
+    <div class="container">
       <div class="row">
           @include('elements.messages')
             <div class="col-12">
-                <div class="container">
                     <div class="row d-flex align-items-center justify-content-between border-bottom pb-2">
                         <h1>Mis consultas</h1>
                         <div>
                             <a href="{{route('user.index')}}" class="btn btn-primary">Volver</a>
-                            <a href="{{route('user.index')}}" class="btn btn-primary">Nueva Consulta</a>
+                            <a href="#" class="btn btn-primary">Nueva Consulta</a>
                         </div>
                     </div>
                     <div class="row w-100 mb-3">
                         <div class="d-flex mt-3">
                             <div class="mr-2">
-                                <input style="width: 12.5rem;" placeholder="Buscar por materia o profesor">
+                                <input class="form-control" style="width: 15.5rem;" placeholder="Buscar por materia o profesor">
                             </div>
                             <div  class="d-flex mr-2 align-items-center">
                                 <label for="type" class="text-md-right" style="width: 100%; margin-right: 1.25rem;">{{ __('Ordenar por:') }}</label>
-                                
                                 <select class="form-control" name="type" id="type" style="width: 9.375rem;">
                                     <option value="student">Ascendente</option>
                                     <option value="teacher">Descendente</option>
@@ -86,8 +84,7 @@
                             </div>
 
                         <!-- TODO: BORRAR UNA DE LAS VISTAS-->
-                </div>
-                    <h1>Inscripciones para el alumno {{$user->getFullName()}}</h1>
+                    {{-- <h1>Inscripciones para el alumno {{$user->getFullName()}}</h1>
                     <table class="table table-striped">
                     <thead>
                       <tr>
@@ -120,7 +117,7 @@
                     @endforeach
                       <tr>
                     </tbody>
-                  </table>
+                  </table> --}}
 
                             <div class="card mb-4" style="width: 25rem;">
                                 <div class="card-body">
@@ -182,8 +179,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-=======
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -222,5 +217,4 @@
   });
 </script>
 
->>>>>>> consultas
 @endsection

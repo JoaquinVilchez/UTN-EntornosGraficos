@@ -6,7 +6,8 @@
           @include('elements.messages')
             <div class="col-12">
                 <div class="container">
-                    <div class="row">
+                    <div class="row d-flex justify-content-between">
+                        <h1>Materias</h1>
                         <div class="ml-auto"><a href="{{route('subject.create')}}" type="button" class="btn btn-primary">Nueva materia</a></div>
                     </div>
                 </div>
@@ -26,7 +27,7 @@
                             <td>{{$subject->id}}</td>
                             <td>{{$subject->name}}</td>
                             <td>{{$subject->level}}</td>
-                            <td>{{$subject->career}}</td>         
+                            <td>{{$subject->career}}</td>
                             <td>
 
                              <a href="{{route('subject.edit', $subject->id)}}">Editar</a>
