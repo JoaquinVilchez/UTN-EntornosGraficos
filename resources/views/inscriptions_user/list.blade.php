@@ -6,26 +6,29 @@
           @include('elements.messages')
             <div class="col-12">
                     <div class="row d-flex align-items-center justify-content-between border-bottom pb-2">
-                        <h1>Mis consultas</h1>
+                        <h1>Mis inscripciones</h1>
                         <div>
                             <a href="#" class="btn btn-primary">Volver</a>
-                            <a href="#" class="btn btn-primary">Nueva Consulta</a>
+                            <a href="#" class="btn btn-primary">Nueva inscripción</a>
                         </div>
                     </div>
-                    <div class="row w-100 mb-3">
-                        <div class="d-flex mt-3">
-                            <div class="mr-2">
-                                <input class="form-control" style="width: 15.5rem;" placeholder="Buscar por materia o profesor">
-                            </div>
-                            <div  class="d-flex mr-2 align-items-center">
-                                <label for="type" class="text-md-right" style="width: 100%; margin-right: 1.25rem;">{{ __('Ordenar por:') }}</label>
-                                <select class="form-control" name="type" id="type" style="width: 9.375rem;">
-                                    <option value="student">Ascendente</option>
-                                    <option value="teacher">Descendente</option>
-                                </select>
-                            </div>
+
+                    <form action="{{route('inscriptions_user.list', $user->id)}}" method="GET">
+                        <div class="row align-items-center pb-2 pt-2">
+                                <div class="col-auto">
+                                    <select class="form-control" name="orderbyDate" id="orderbyDate" style="width: 9.375rem;">
+                                        <option value="ASC" {{old('orderbyDate') == "ASC" ? 'selected' : ''}}>Ascendente</option>
+                                        <option value="DESC" {{old('orderbyDate') == "DESC" ? 'selected' : ''}}>Descendente</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <button class="btn btn-dark" type="submit">Actualizar</button>
+                                </div>
+                                    
                         </div>
-                    </div>
+                    </form>
+
 
                     <div class="col">
                         <div class="row justify-content-around">

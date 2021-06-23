@@ -50,16 +50,25 @@ class InscriptionController extends Controller
         
     }
 
-    public function list($user_id)
+    public function list(Request $request, $user_id)
     {
+        $orderbyDate = 'ASC';
 
-        
+        if($request->orderbyDate != null)
+        {
+            $orderbyDate = $request->orderbyDate;
+
+        }
 
         $user = User::find($user_id);
+        $today = new DateTime();
+
         $inscriptions = Inscription::select('inscriptions.*')
         ->join('meetings', 'meetings.id', '=', 'inscriptions.meeting_id')
+        ->orderby('meetings.datetime', $orderbyDate)
         ->where('student_id', $user_id)
         ->where('inscriptions.state', 'enrolled')
+        ->where('meetings.datetime', '>=', $today) 
         ->get()
         ->unique();
 
