@@ -131,15 +131,13 @@
   @endsection
 
 @section('js-script')
-<script>
+    <script>
+        $('#deleteModal').on('show.bs.modal', function(event){
+            var button = $(event.relatedTarget)
 
-  $('#deleteModal').on('show.bs.modal', function(event){
-    var button = $(event.relatedTarget)
-
-    var inscriptionid = button.data('inscriptionid')
-    var modal = $(this)
-    modal.find('.modal-body #inscriptionid').val(inscriptionid)
-  });
-</script>
-
+            var inscriptionid = button.data('inscriptionid')
+            var modal = $(this)
+            modal.find('.modal-body #inscriptionid').val(inscriptionid)
+        });
+    </script>
 @endsection
