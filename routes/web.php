@@ -59,8 +59,8 @@ Route::post('/materias-usuario/editar/{id_user}', [SubjectUserController::class,
 Route::get('/materias-usuario/editar/{id_user}/roles', [SubjectUserController::class, 'view_roles_and_status'])->name('subjects_user.view_roles_and_status');
 Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destroy'])->name('subjects_user.destroy');
 
-Route::get('/inscripciones', [InscriptionController::class, 'list'])->name('inscriptions_user.list');
-Route::post('/inscripciones/cancelar', [InscriptionController::class, 'cancel'])->name('inscription.cancel');
+Route::get('/mis-inscripciones/{id_user}', [InscriptionController::class, 'list'])->name('inscriptions_user.list');
+Route::post('/mis-inscripciones/cancelar/', [InscriptionController::class, 'cancel'])->name('inscription.cancel');
 
 // Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('inscriptions_user.list');
 // Route::get('/materias-consultas/{id_subject}', [SubjectUserController::class, 'view_subjects_meeting'])->name('subjects_user.view_subjects_meeting');

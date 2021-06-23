@@ -46,6 +46,14 @@ class Meeting extends Model
 
     }
 
+    public function getType(){
+        $type = $this->type;
+
+        if($type == 'face-to-face') return 'Presencial';
+
+        if($type == 'virtual') return 'Virtual';
+    }
+
 
     // $consulta = Meeting::find(1);
 
