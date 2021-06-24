@@ -60,8 +60,13 @@ Route::post('/materias-usuario/editar/{id_user}', [SubjectUserController::class,
 Route::get('/materias-usuario/editar/{id_user}/roles', [SubjectUserController::class, 'view_roles_and_status'])->name('subjects_user.view_roles_and_status');
 Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destroy'])->name('subjects_user.destroy');
 
+//Inscripciones
 Route::get('/mis-inscripciones', [InscriptionController::class, 'list'])->name('inscriptions_user.list');
 Route::post('/mis-inscripciones/cancelar/', [InscriptionController::class, 'cancel'])->name('inscription.cancel');
+Route::get('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_subject'])->name('inscriptions.select_subject');
+Route::post('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_teacher_for_subject'])->name('inscriptions.select_teacher_for_subject');
+Route::post('/inscripciones/nueva/ver-consultas', [InscriptionController::class, 'view_meetings'])->name('inscriptions.view_meetings');
+
 
 //Consultas
 Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');
@@ -69,5 +74,3 @@ Route::get('/consultas/nuevo', [MeetingController::class, 'create'])->name('meet
 Route::post('/consultas/nuevo', [MeetingController::class, 'store'])->name('meetings.store');
 
 
-// Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('inscriptions_user.list');
-// Route::get('/materias-consultas/{id_subject}', [SubjectUserController::class, 'view_subjects_meeting'])->name('subjects_user.view_subjects_meeting');

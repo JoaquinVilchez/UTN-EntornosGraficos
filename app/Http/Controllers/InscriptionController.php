@@ -4,15 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Models\Inscription;
 use App\Models\Meeting;
+use App\Models\Subject;
 use App\Models\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Throwable;
 
 class InscriptionController extends Controller
 {
+
+    public function select_subject()
+    {
+        $user = Auth::user();
+        $subjects = $user->subjects;
+
+        return view('inscriptions_user.select_subject')->with('subjects', $subjects);
+    }
+
+    public function select_teacher_for_subject(Request $request)
+    {
+
+        $subject = Subject::find($request->subject_id);
+        $teachers = $subject->teachers(); 
+        return view('inscriptions_user.select_teacher_for_subject')->with('teachers', $teachers)->with('subject', $subject);
+    }
+
+    public function view_meetings(Request $request)
+    {
+        try
+        {
+            $subject = Subject::find($request->subject_id);
+            $teacher = User::find($request->teacher_id);
+            $teachers_of_subject = $subject->teachers();
+            if(count($teachers_of_subject->whereIn('id', $teacher->id)) != 1){
+                
+                return redirect()->route('inscriptions.select_subject')->with('error_message', 'Hubo un problema al seleccionar el docente y materia');
+                
+            }
+            else
+            {
+                /*Buscar consultas para el docente*/
+                $meetings = Meeting::all()->where('teacher_id', $teacher->id)->where('subject_id', $subject->id);
+                return redirect()->route('inscriptions.view_meetings')->with($meetings);
+            }
+
+        }
+        catch(Throwable $th){
+                return redirect()->route('inscriptions.select_subject')->with('error_message', 'Hubo un problema al seleccionar el docente y materia');
+
+        }
+
+    }
+    
+
 
 
     public function cancel(Request $request)
