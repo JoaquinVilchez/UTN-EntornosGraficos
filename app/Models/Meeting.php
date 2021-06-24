@@ -26,6 +26,11 @@ class Meeting extends Model
         return $this->hasMany(Inscription::class);
     }
 
+    public function canceledMeetings(){
+        return $this->hasMany(CanceledMeetings::class);
+
+    }
+
     public function getState()
     {
         $state = $this->state;
@@ -34,15 +39,9 @@ class Meeting extends Model
             return 'Cancelado';
         }
         
-        if($state == 'confirmed'){
-            return 'Confirmado';
-        }
-
-        if($state == 'pending'){
-            return 'Pendiente';
-        }
-
-        
+        if($state == 'active'){
+            return 'Activo';
+        }        
 
     }
 
@@ -54,10 +53,6 @@ class Meeting extends Model
         if($type == 'virtual') return 'Virtual';
     }
 
-
-    // $consulta = Meeting::find(1);
-
-    // $consulta->user;
 
 
 

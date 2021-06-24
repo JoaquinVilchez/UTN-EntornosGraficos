@@ -36,7 +36,7 @@
                             @foreach ($inscriptions as $inscription)
 
                                 <div class="card mb-4" style="width: 25rem;
-                                @if ($inscription->meeting->state == 'canceled')
+                                @if ($inscription->status == 'canceled')
                                     background-color: lightgray;
                                 @endif
                                 ">
@@ -47,7 +47,7 @@
                                                 <img style="height: 10rem;" src="https://www.gammaingenieros.com/wp-content/uploads/2017/07/400x400-300x300.gif" alt="Card image cap">
                                                 <div class="d-flex justify-content-around mt-2">
                                                     <button 
-                                                        @if ($inscription->meeting->state == 'canceled')
+                                                        @if ($inscription->status == 'canceled')
                                                             disabled
                                                         @endif                                                                                                           
                                                     
@@ -56,7 +56,7 @@
                                                     @if ($inscription->meeting->type == 'virtual')
                                                         <button 
                                                         
-                                                        @if ($inscription->meeting->state == 'canceled')
+                                                        @if ($inscription->status == 'canceled')
                                                             disabled
                                                         @endif
 
@@ -72,7 +72,7 @@
                                                 <h5 class="font-weight-bold">Fecha y hora</h5>
 
                                                 @php
-                                                    $date = strtotime($inscription->meeting->datetime);
+                                                    $date = strtotime($inscription->datetime);
                                                 @endphp
                                                 <p class="card-text">{{date('d/m/Y h:i', $date)}}</p>
                                                 <h5 class="font-weight-bold">Reunión</h5>

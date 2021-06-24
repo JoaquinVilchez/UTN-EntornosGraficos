@@ -25,23 +25,13 @@ class Inscription extends Model
     {
         $state = $this->state;
 
-        if($state == 'enrolled'){
-            return 'Inscripto';
+        if($state == 'active'){
+            return 'Activo';
         }
         
         if($state == 'canceled'){
             return 'Cancelado';
-        }
-
-        if($state == 'attended'){
-            return 'Asistido';
-        }
-
-        if($state == 'not_attended'){
-            return 'Ausente';
-        }
-
-        
+        }        
 
     }
 

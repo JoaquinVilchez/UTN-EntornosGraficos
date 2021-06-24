@@ -6,6 +6,7 @@ use App\Models\Inscription;
 use App\Models\Meeting;
 use Illuminate\Database\Seeder;
 use App\Models\Subject;
+use Carbon\Carbon;
 use DateTime;
 
 class InscriptionSeeder extends Seeder
@@ -18,50 +19,42 @@ class InscriptionSeeder extends Seeder
     public function run()
     {
 
+        $minDateTime = new DateTime();
+        $maxDateTime = new DateTime('+2 months');
+        
         $meetings = Meeting::all();
-        $states = ['enrolled', 'attended', 'not_attended', 'canceled'];
         $rating_review = null;
         $message_review = null;
-        $finish_states = ['attended', 'not_attended'];
 
-
-        $now = new DateTime();
 
         foreach($meetings as $meeting){
-           $subject = Subject::find($meeting->subject_id);
-           $students = $subject->students();
-           $student = $students->random(1)->first();
 
-           foreach ($students as $student){
+            for ($i = 0; $i < 2; $i++) 
+            {
+        
+                $subject = Subject::find($meeting->subject_id);
+                $students = $subject->students();
+                $student = $students->random(1)->first();
 
-                $state = $states[rand(0,3)];
-            
-                if($meeting->datetime < $now)
+                foreach ($students as $student)
                 {
-                    $state = $finish_states[rand(0,1)];
+                    $day = $meeting->day;
+                    $hour=$meeting->hour;
+                    $datetime = new Carbon(); //Habria que obtener aleatoriamente una fecha basandose en el dia y hora establecido   
+
+                    $status = 'active';
+                        
+                    Inscription::create([
+                        'datetime' => $datetime,
+                        'status' => $status,
+                        'meeting_id' => $meeting->id,
+                        'student_id' => $student->id,
+                        'rating_review' => $rating_review,
+                        'message_review' => $message_review
+                    ]);
+
                 }
-
-                if($meeting->state == 'canceled')
-                {
-                    $state = 'canceled';
-                }
-
-                if($meeting->state == 'pending'){
-                    $state = 'enrolled';
-                }
-
-
-                    
-                Inscription::create([
-                    'state' => $state,
-                    'meeting_id' => $meeting->id,
-                    'student_id' => $student->id,
-                    'rating_review' => $rating_review,
-                    'message_review' => $message_review
-
-                ]);
-
-           }
+            }
         }
 
         

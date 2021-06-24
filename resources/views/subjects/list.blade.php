@@ -30,8 +30,10 @@
                             <td>{{$subject->career}}</td>
                             <td>
 
-                             <a href="{{route('subject.edit', $subject->id)}}">Editar</a>
-                                <a href="#" data-toggle="modal" data-target="#deleteModal" data-subjectid="{{$subject->id}}">Eliminar</a>
+                              <a class="btn btn-info" href="{{route('subjects_user.view_subjects_info', $subject->id)}}">Ver info</a>
+                              <a class="btn btn-warning" href="{{route('subject.edit', $subject->id)}}">Editar</a>
+                              <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal" data-subjectid="{{$subject->id}}">Eliminar</a>
+                              
                             </td>
                         </tr>
                     @endforeach

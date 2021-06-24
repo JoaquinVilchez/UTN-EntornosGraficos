@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInscriptionsTable extends Migration
+class CreateCanceledMeetings extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateInscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inscriptions', function (Blueprint $table) {
+        Schema::create('canceled_meetings', function (Blueprint $table) {
             $table->id();
             $table->datetime('datetime');
-            $table->string('status')->default('active'); //active, assisted, cancelled
-            $table->integer('rating_review')->nullable();
-            $table->longText('message_review')->nullable();
-            $table->unsignedBigInteger('student_id');
-            $table->foreign('student_id')->references('id')->on('users');
+            $table->string('reason');
+            $table->datetime('alternative_datetime');
             $table->unsignedBigInteger('meeting_id');
             $table->foreign('meeting_id')->references('id')->on('meetings');
             $table->timestamps();
+
         });
     }
 
@@ -34,6 +32,6 @@ class CreateInscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inscriptions');
+        Schema::dropIfExists('canceled_meetings');
     }
 }

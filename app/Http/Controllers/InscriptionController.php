@@ -65,7 +65,6 @@ class InscriptionController extends Controller
                 ->join('meetings', 'meetings.id', '=', 'inscriptions.meeting_id')
                 ->orderby('meetings.datetime', $orderbyDate)
                 ->where('student_id', $user->id)
-                ->where('inscriptions.state', 'enrolled')
                 ->where('meetings.datetime', '>=', $today)
                 ->get()
                 ->unique();
