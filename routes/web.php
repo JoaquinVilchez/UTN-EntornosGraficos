@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubjectUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\MeetingController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Subject;
@@ -61,6 +62,12 @@ Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destr
 
 Route::get('/mis-inscripciones', [InscriptionController::class, 'list'])->name('inscriptions_user.list');
 Route::post('/mis-inscripciones/cancelar/', [InscriptionController::class, 'cancel'])->name('inscription.cancel');
+
+//Consultas
+Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');
+Route::get('/consultas/nuevo', [MeetingController::class, 'create'])->name('meetings.create');
+Route::post('/consultas/nuevo', [MeetingController::class, 'store'])->name('meetings.store');
+
 
 // Route::get('/inscripciones-alumno/{id_user}', [InscriptionController::class, 'index'])->name('inscriptions_user.list');
 // Route::get('/materias-consultas/{id_subject}', [SubjectUserController::class, 'view_subjects_meeting'])->name('subjects_user.view_subjects_meeting');
