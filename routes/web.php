@@ -73,7 +73,7 @@ Route::post('/inscripciones/nueva/seleccionar-materia', [InscriptionController::
 Route::post('/inscripciones/nueva/ver-consultas', [InscriptionController::class, 'view_meetings'])->name('inscriptions_user.view_meetings');
 Route::get('/inscripciones/nueva', [InscriptionController::class, 'create'])->name('inscriptions_user.create');
 Route::post('/inscripciones/nueva/seleccionar-docente', [InscriptionController::class, 'selectTeacher'])->name('inscriptions_user.select_teacher');
-
+Route::post('/inscripciones/nueva/seleccionar-consulta', [InscriptionController::class, 'selectMeeting'])->name('inscriptions_user.select_meeting');
 
 //Consultas
 Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');

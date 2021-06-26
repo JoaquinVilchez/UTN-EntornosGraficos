@@ -31,9 +31,22 @@
           <div class="form-group row">
             <label for="teachers" class="col-md-4 col-form-label text-md-right">{{ __('Docente') }}</label>
             <div class="col-md-6">
-                <select id="teachers" type="text" class="custom-select @error('teachers') is-invalid @enderror" name="teachers" value="{{ old('teachers') }}" required autocomplete="subjects">
+                <select id="teachers" onchange="selectMeeting()" type="text" class="custom-select @error('teachers') is-invalid @enderror" name="teachers" value="{{ old('teachers') }}" required autocomplete="teachers">
                 </select>
                 @error('teachers')
+                  <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                  </span>
+                @enderror
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="meetings" class="col-md-4 col-form-label text-md-right">{{ __('Consultas disponibles') }}</label>
+            <div class="col-md-6">
+                <select id="meetings" type="text" class="custom-select @error('meetings') is-invalid @enderror" name="meetings" value="{{ old('meetings') }}" required autocomplete="meetings">
+                </select>
+                @error('meetings')
                   <span class="invalid-feedback" role="alert">
                       <strong>{{ $message }}</strong>
                   </span>
@@ -63,10 +76,40 @@
           data:{subjectId:subjectId},
           success:function(data){
             let option;
+            option = `<option>Seleccione una opción</option>`;
+            selectTeachers.append(option);
             data.forEach(teacher => {
               option = `<option value="${teacher.id}">${teacher.first_name} ${teacher.last_name}</option>`;
 
               selectTeachers.append(option);
+            });
+          }, 
+          error:function(data){
+            console.log(data)
+          }
+      });
+    };
+
+    function selectMeeting(){
+      const teacherId = $('#teachers').val();
+      const subjectId = $('#subjects').val();
+      const selectMeetings = $("#meetings");
+
+      selectMeetings.find('option').remove();
+      $.ajax({
+          url : '/inscripciones/nueva/seleccionar-consulta',
+          type: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          data:{teacherId:teacherId, subjectId:subjectId},
+          success:function(data){
+            let option;
+            data.forEach(meeting => {
+              console.log(data)
+              option = `<option value="${meeting.id}">${meeting.id}</option>`;
+
+              selectMeetings.append(option);
             });
           }, 
           error:function(data){

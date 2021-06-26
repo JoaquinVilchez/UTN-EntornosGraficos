@@ -33,6 +33,16 @@ class InscriptionController extends Controller
        return $teachers;
     }
 
+    public function selectMeeting(Request $request) 
+    {
+       $subject = Subject::find($request->subjectId);
+       $teacher = User::find($request->teacherId);
+    
+       $meetings = Meeting::where('teacher_id', $request->teacherId)->where('subject_id', $request->subjectId)->get();
+
+       return $meetings;
+    }
+
     public function select_subject()
     {
         $user = Auth::user();
