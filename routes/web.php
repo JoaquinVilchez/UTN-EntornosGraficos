@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\MeetingController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,10 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('home');
+});
+
+Route::get('/mario', function() {
+    return Hash::make('12345678');
 });
 
 Auth::routes();
@@ -66,7 +71,8 @@ Route::post('/mis-inscripciones/cancelar/', [InscriptionController::class, 'canc
 Route::get('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_subject'])->name('inscriptions_user.select_subject');
 Route::post('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_teacher_for_subject'])->name('inscriptions_user.select_teacher_for_subject');
 Route::post('/inscripciones/nueva/ver-consultas', [InscriptionController::class, 'view_meetings'])->name('inscriptions_user.view_meetings');
-Route::get('/inscripciones/nueva/consulta', [InscriptionController::class, 'create'])->name('inscriptions_user.create');
+Route::get('/inscripciones/nueva', [InscriptionController::class, 'create'])->name('inscriptions_user.create');
+Route::post('/inscripciones/nueva/seleccionar-docente', [InscriptionController::class, 'selectTeacher'])->name('inscriptions_user.select_teacher');
 
 
 //Consultas

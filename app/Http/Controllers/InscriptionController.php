@@ -18,7 +18,19 @@ class InscriptionController extends Controller
 
     public function create()
     {
-        return view('inscriptions.create');
+        $user = Auth::user();
+        $subjects = $user->subjects;
+
+
+        return view('inscriptions_user.create')->with('subjects', $subjects);
+    }
+
+    public function selectTeacher(Request $request) 
+    {
+       $subject = Subject::find($request->subjectId);
+       $teachers = $subject->teachers(); 
+
+       return $teachers;
     }
 
     public function select_subject()
