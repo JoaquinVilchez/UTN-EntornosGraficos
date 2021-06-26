@@ -16,6 +16,11 @@ use Throwable;
 class InscriptionController extends Controller
 {
 
+    public function create()
+    {
+        return view('inscriptions.create');
+    }
+
     public function select_subject()
     {
         $user = Auth::user();
@@ -58,9 +63,6 @@ class InscriptionController extends Controller
         }
 
     }
-    
-
-
 
     public function cancel(Request $request)
     {
