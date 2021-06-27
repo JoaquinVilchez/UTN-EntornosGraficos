@@ -20,6 +20,16 @@ function getSpanishWeekDays()
         4 => 'Jueves',
         5 => 'Viernes',
         6 => 'Sábado',
-        7 => 'Domingo'
+        0 => 'Domingo'
     ];
+}
+
+function normaliza($cadena)
+{
+    $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ!¡?¿';
+    $modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr    ';
+    $cadena = utf8_decode($cadena);
+    $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
+    $cadena = strtolower($cadena);
+    return utf8_encode($cadena);
 }

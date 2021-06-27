@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Meeting;
 use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\MeetingsExport;
+use App\Imports\MeetingsImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MeetingController extends Controller
@@ -103,5 +105,55 @@ class MeetingController extends Controller
     public function export()
     {
         return Excel::download(new MeetingsExport, 'consultas.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        request()->validate([
+            'file' => 'required'
+        ]);
+
+        $meetings = Meeting::all();
+        foreach ($meetings as $meeting) {
+            $meeting->delete();
+        }
+
+        $file = $request->file('file');
+        $items = Excel::toCollection(new MeetingsImport, $file);
+        foreach ($items[0] as $item) {
+
+            $legajo_profesor = User::where('university_id', $item['legajo_profesor'])->first();
+            $materia = Subject::where('name', 'like', '%' . $item['materia'] . '%')->first();
+            $pieces = explode('-', $item['dia_y_hora']);
+            $day = normaliza(trim($pieces[0]));
+            $hour = strtolower(trim($pieces[1]));
+            $weekdays = [
+                'lunes' => 1,
+                'martes' => 2,
+                'miercoles' => 3,
+                'jueves' => 4,
+                'viernes' => 5,
+                'sabado' => 6,
+                'domingo' => 0
+            ];
+
+            if ($item['tipo'] == 'Virtual') {
+                $type = 'virtual';
+            } elseif ($item['tipo'] == 'Presencial') {
+                $type = 'face-to-face';
+            }
+
+            Meeting::create([
+                'teacher_id' => $legajo_profesor->id,
+                'subject_id' => $materia->id,
+                'day' => $weekdays[$day],
+                'hour' => $hour,
+                'type' => $type,
+                'classroom' => $item['salon_opc'],
+                'meeting_url' => $item['link_opc']
+            ]);
+        }
+
+        return redirect()->route('meetings.list')->with('success_message', 'Importado con éxito');
     }
 }

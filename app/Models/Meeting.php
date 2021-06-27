@@ -55,10 +55,17 @@ class Meeting extends Model
 
     public function getDayAndHour()
     {
-        $weekDays = getSpanishWeekDays();
-        return $weekDays[$this->day] . ' a las ' . $this->hour . 'hs';
+        $weekDays = [
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado',
+            0 => 'Domingo'
+        ];
 
-        //
+        return $weekDays[$this->day] . ' a las ' . $this->hour . 'hs';
     }
 
     public function getExcelDayAndHour()
