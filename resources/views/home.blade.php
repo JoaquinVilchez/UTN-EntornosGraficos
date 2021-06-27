@@ -29,8 +29,12 @@
                     <a href="{{route('user.index')}}" class="btn btn-primary m-2">Usuarios</a>
                     <a href="{{route('users.search_teacher')}}" class="btn btn-primary m-2">Docentes</a>
                     <a href="{{route('subject.index')}}" class="btn btn-primary m-2">Materias</a>                    
-                    <a href="{{route('subjects_user.index', Auth::user()->id)}}" class="btn btn-primary m-2">Mis inscripciones a materias</a> 
-                    <a href="{{route('inscriptions_user.list')}}" class="btn btn-primary m-2">Mis inscripciones consultas</a> 
+                    <a href="{{route('inscriptions_user.list')}}" class="btn btn-primary m-2">Mis inscripciones consultas</a>      
+
+                    @if (Auth::check())
+                        <a href="{{route('subjects_user.index', Auth::user()->id)}}" class="btn btn-primary m-2">Mis inscripciones a materias</a> 
+                    @endif
+                    
 
                 </div>
             </div>

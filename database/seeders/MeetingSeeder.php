@@ -28,7 +28,7 @@ class MeetingSeeder extends Seeder
 
         foreach($subjects as $subject) 
         {
-            for ($i = 0; $i < 2; $i++)
+            for ($i = 0; $i < 3; $i++)
             {
                 //$dateTime_timestamp =  rand($minDateTime->getTimestamp(), $maxDateTime->getTimestamp());
                 //$dateTime = date('Y-m-d H:i:s', $dateTime_timestamp);
