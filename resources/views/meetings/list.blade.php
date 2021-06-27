@@ -56,11 +56,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @endif
                     <div class="d-flex justify-content-between align-items-center">
                         {{$meetings->links()}}
                         <a href="{{route('meetings.export')}}" class="btn btn-success">Exportar a Excel</a>
                     </div>
-                @endif
             </div>
         </div>
     </div>
