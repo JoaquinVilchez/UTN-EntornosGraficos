@@ -54,8 +54,12 @@ class Meeting extends Model
     }
 
 
+    public function getDayAndHour()
+    {
+        $weekDays = getSpanishWeekDays();
+        return $weekDays[$this->day] . ' a las ' . $this->hour . 'hs';
 
-
-
+        //
+    }
 
 }
