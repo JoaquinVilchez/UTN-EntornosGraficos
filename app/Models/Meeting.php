@@ -60,4 +60,10 @@ class Meeting extends Model
 
         //
     }
+
+    public function getExcelDayAndHour()
+    {
+        $weekDays = getSpanishWeekDays();
+        return $weekDays[$this->day] . ' - ' . $this->hour;
+    }
 }

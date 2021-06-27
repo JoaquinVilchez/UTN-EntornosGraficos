@@ -6,6 +6,8 @@ use App\Models\Meeting;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\MeetingsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MeetingController extends Controller
 {
@@ -96,5 +98,10 @@ class MeetingController extends Controller
         $meeting->delete();
 
         return redirect()->route('meetings.list')->with('success_message', 'Consulta eliminada con éxito');
+    }
+
+    public function export()
+    {
+        return Excel::download(new MeetingsExport, 'consultas.xlsx');
     }
 }

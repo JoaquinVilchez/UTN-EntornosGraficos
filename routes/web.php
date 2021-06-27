@@ -75,3 +75,4 @@ Route::post('/consultas/nuevo', [MeetingController::class, 'store'])->name('meet
 Route::get('/consultas/editar/{id}', [MeetingController::class, 'edit'])->name('meetings.edit');
 Route::put('/consultas/editar/{id}', [MeetingController::class, 'update'])->name('meetings.update');
 Route::post('/consultas/eliminar', [MeetingController::class, 'destroy'])->name('meetings.destroy');
+Route::get('/consultas/exportar', [MeetingController::class, 'export'])->name('meetings.export');

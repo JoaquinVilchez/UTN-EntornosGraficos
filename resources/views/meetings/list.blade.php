@@ -47,7 +47,7 @@
                                 @endif
                             </td>
                             <td>{!!$meeting->getState()!!}</td>
-                            <td> 
+                            <td>
                                 <a href="{{route('meetings.edit', $meeting->id)}}"><i class="fas fa-edit"></i></a>
                                 <a href="#" data-toggle="modal" data-toggle="modal" data-target="#deleteMeetingModal" data-meetingid="{{$meeting->id}}"><i class="fas fa-trash"></i></a>
                             </td>
@@ -57,7 +57,7 @@
                 </table>
                 <div class="d-flex justify-content-between align-items-center">
                     {{$meetings->links()}}
-                    <a href="#" class="btn btn-success">Exportar a Excel</a>
+                    <a href="{{route('meetings.export')}}" class="btn btn-success">Exportar a Excel</a>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal -->
     <div class="modal fade" id="deleteMeetingModal" tabindex="-1" aria-labelledby="deleteMeetingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
