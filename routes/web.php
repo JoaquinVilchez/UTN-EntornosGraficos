@@ -72,3 +72,6 @@ Route::post('/inscripciones/nueva/ver-consultas', [InscriptionController::class,
 Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');
 Route::get('/consultas/nuevo', [MeetingController::class, 'create'])->name('meetings.create');
 Route::post('/consultas/nuevo', [MeetingController::class, 'store'])->name('meetings.store');
+Route::get('/consultas/editar/{id}', [MeetingController::class, 'edit'])->name('meetings.edit');
+Route::put('/consultas/editar/{id}', [MeetingController::class, 'update'])->name('meetings.update');
+Route::post('/consultas/eliminar', [MeetingController::class, 'destroy'])->name('meetings.destroy');

@@ -48,14 +48,17 @@
                             </td>
                             <td>{!!$meeting->getState()!!}</td>
                             <td> 
-                                <a href="#"><i class="fas fa-edit"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#deleteMeetingModal"><i class="fas fa-trash"></i></a>
+                                <a href="{{route('meetings.edit', $meeting->id)}}"><i class="fas fa-edit"></i></a>
+                                <a href="#" data-toggle="modal" data-toggle="modal" data-target="#deleteMeetingModal" data-meetingid="{{$meeting->id}}"><i class="fas fa-trash"></i></a>
                             </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                {{$meetings->links()}}
+                <div class="d-flex justify-content-between align-items-center">
+                    {{$meetings->links()}}
+                    <a href="#" class="btn btn-success">Exportar a Excel</a>
+                </div>
             </div>
         </div>
     </div>
@@ -87,7 +90,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Modal -->
     <div class="modal fade" id="deleteMeetingModal" tabindex="-1" aria-labelledby="deleteMeetingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -98,10 +101,10 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-          <form action="{{route('subject.destroy')}}" method="POST">
+          <form action="{{route('meetings.destroy')}}" method="POST">
             @csrf
               <div class="modal-body">
-                  <input type="hidden" value="" id="subjectid" name="subjectid">
+                  <input type="hidden" value="" id="meetingid" name="meetingid">
                   ¿Estás seguro de eliminar esta consulta?
               </div>
               <div class="modal-footer">
@@ -112,4 +115,17 @@
           </div>
         </div>
       </div>
-@endsection
+  @endsection
+  
+  @section('js-script')
+      <script>
+  
+        $('#deleteMeetingModal').on('show.bs.modal', function(event){
+          var button = $(event.relatedTarget)
+  
+          var meetingid = button.data('meetingid')
+          var modal = $(this)
+          modal.find('.modal-body #meetingid').val(meetingid)
+        });
+      </script>
+  @endsection

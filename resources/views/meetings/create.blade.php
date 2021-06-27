@@ -28,7 +28,6 @@
                         <div class="col-md-6">
                             <label for="teachers" class="col-form-label">Profesor</label>
                             <select id="teachers" data-live-search="true" class="border form-control" name="teacher" value="{{ old('teacher') }}" required>
-                                <option>Seleccione una opción</option>
                             </select>
 
                             @error('teacher')
@@ -137,8 +136,6 @@
             const subjectId = $('#subjects').val();
             const selectTeachers = $("#teachers");
             selectTeachers.find('option').remove();
-            let selectOption = `<option>Seleccione una opcion</option>`
-            selectTeachers.append(selectOption)
             $.ajax({
                 url : '/materia/docentes',
                 type: 'POST',
