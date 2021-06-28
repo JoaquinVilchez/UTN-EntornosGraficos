@@ -18,7 +18,7 @@ class Meeting extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(User::class, 'profesor_id');
+        return $this->belongsTo(User::class);
     }
 
     public function inscriptions()

@@ -34,7 +34,7 @@ class MeetingSeeder extends Seeder
                 //$dateTime = date('Y-m-d H:i:s', $dateTime_timestamp);
                 
                 $day = rand(0,6);
-                $hour = rand(0, count($hours)-1); 
+                $hour = $hours[rand(0, count($hours)-1)]; 
                 $type = $types[rand(0, 1)];
                 $teacher = $subject->teachers()->random(1)->first();
                 $status = 'active';

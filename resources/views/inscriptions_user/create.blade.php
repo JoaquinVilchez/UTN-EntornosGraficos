@@ -5,55 +5,72 @@
   <div class="row">
       <div class="col-12">
         <div class="row d-flex align-items-center justify-content-between border-bottom pb-2">
-            <h1>Crear nueva consulta</h1>
+            <h1>Inscribirse a una consulta</h1>
             <div>
-                <a href="#" class="btn btn-primary">Cancelar</a>
+                <a href="{{redirect()->back()}}" class="btn btn-primary">Volver</a>
             </div>
         </div>
 
-        <div class="container mt-5">
-          <div class="form-group row">
-              <label for="subjects" class="col-md-4 col-form-label text-md-right">{{ __('Materia') }}</label>
-            <div class="col-md-6">
-                <select id="subjects" onchange="selectTeacher()" type="text" class="custom-select @error('subjects') is-invalid @enderror" name="subjects" value="{{ old('subjects') }}" required autocomplete="subjects">
-                  @foreach ($subjects as $subject)
-                    <option value="{{$subject->id}}">{{$subject->name}}</option>
-                  @endforeach
-                </select>
-                @error('subjects')
-                  <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                  </span>
-                @enderror
+        <form method="POST" action="{{route('inscriptions_user.create')}}">
+        @csrf
+          <div class="container mt-5">
+            <div class="form-group row">
+                <label for="subjects" class="col-md-4 col-form-label text-md-right">{{ __('Materia') }}</label>
+              <div class="col-md-6">
+                  <select id="subjects" onchange="selectTeacher()" type="text" class="custom-select @error('subjects') is-invalid @enderror" name="subjects" value="{{ old('subjects') }}" required autocomplete="subjects">
+                      <option value="">Seleccionar una materia</option>
+
+                    @foreach ($subjects as $subject)
+                      <option value="{{$subject->id}}">{{$subject->name}}</option>
+                    @endforeach
+                  </select>
+                  @error('subjects')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+              </div>
             </div>
+
+            <div class="form-group row">
+              <label for="teachers" class="col-md-4 col-form-label text-md-right">{{ __('Docente') }}</label>
+              <div class="col-md-6">
+                  <select id="teachers" onchange="selectMeeting()" type="text" class="custom-select @error('teachers') is-invalid @enderror" name="teachers" value="{{ old('teachers') }}" required autocomplete="teachers">
+                    <option value="">Seleccionar un docente</option>
+                  </select>
+                  @error('teachers')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+              </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="meetings" class="col-md-4 col-form-label text-md-right">{{ __('Consultas disponibles') }}</label>
+                <div class="col-md-6">
+
+                  <div id="meetings" name="meetings">
+                  </div>
+
+                    @error('meetings')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row mb-0">
+              <div class="col-md-6 offset-md-4">
+                  <button type="submit" class="btn btn-primary btn-block">
+                      Inscribirse
+                  </button>
+              </div>
           </div>
 
-          <div class="form-group row">
-            <label for="teachers" class="col-md-4 col-form-label text-md-right">{{ __('Docente') }}</label>
-            <div class="col-md-6">
-                <select id="teachers" onchange="selectMeeting()" type="text" class="custom-select @error('teachers') is-invalid @enderror" name="teachers" value="{{ old('teachers') }}" required autocomplete="teachers">
-                </select>
-                @error('teachers')
-                  <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                  </span>
-                @enderror
-            </div>
           </div>
-
-          <div class="form-group row">
-            <label for="meetings" class="col-md-4 col-form-label text-md-right">{{ __('Consultas disponibles') }}</label>
-            <div class="col-md-6">
-                <select id="meetings" type="text" class="custom-select @error('meetings') is-invalid @enderror" name="meetings" value="{{ old('meetings') }}" required autocomplete="meetings">
-                </select>
-                @error('meetings')
-                  <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                  </span>
-                @enderror
-            </div>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -104,13 +121,9 @@
           },
           data:{teacherId:teacherId, subjectId:subjectId},
           success:function(data){
-            let option;
-            data.forEach(meeting => {
-              console.log(data)
-              option = `<option value="${meeting.id}">${meeting.id}</option>`;
+            $('#meetings').html(data);
 
-              selectMeetings.append(option);
-            });
+            
           }, 
           error:function(data){
             console.log(data)
