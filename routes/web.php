@@ -46,6 +46,7 @@ Route::post('/usuarios/store', [UserController::class, 'store'])->name('user.sto
 Route::get('/usuarios/editar/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/usuarios/editar/{id}', [UserController::class, 'update'])->name('user.update');
 Route::post('/usuarios/eliminar', [UserController::class, 'destroy'])->name('user.destroy');
+Route::post('/materia/docentes', [UserController::class, 'getTeachersFromSubject'])->name('user.getTeachersFromSubject');
 
 Route::get('/docentes', [SubjectUserController::class, 'search_teacher'])->name('users.search_teacher');
 
@@ -74,6 +75,12 @@ Route::post('/inscripciones/nueva/seleccionar-docente', [InscriptionController::
 Route::post('/inscripciones/nueva/seleccionar-consulta', [InscriptionController::class, 'selectMeeting'])->name('inscriptions_user.select_meeting');
 Route::post('/inscripciones/nueva/', [InscriptionController::class, 'store'])->name('inscriptions_user.store');
 
-
-
-
+//Consultas
+Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');
+Route::get('/consultas/nuevo', [MeetingController::class, 'create'])->name('meetings.create');
+Route::post('/consultas/nuevo', [MeetingController::class, 'store'])->name('meetings.store');
+Route::get('/consultas/editar/{id}', [MeetingController::class, 'edit'])->name('meetings.edit');
+Route::put('/consultas/editar/{id}', [MeetingController::class, 'update'])->name('meetings.update');
+Route::post('/consultas/eliminar', [MeetingController::class, 'destroy'])->name('meetings.destroy');
+Route::get('/consultas/exportar', [MeetingController::class, 'export'])->name('meetings.export');
+Route::post('/consultas/importar', [MeetingController::class, 'import'])->name('meetings.import');
