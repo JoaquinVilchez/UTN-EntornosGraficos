@@ -7,7 +7,7 @@
         <div class="row d-flex align-items-center justify-content-between border-bottom pb-2">
             <h1>Inscribirse a una consulta</h1>
             <div>
-                <a href="{{redirect()->back()}}" class="btn btn-primary">Volver</a>
+                <a href="{{route('inscriptions_user.list')}}" class="btn btn-primary">Volver</a>
             </div>
         </div>
 

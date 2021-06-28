@@ -8,7 +8,7 @@
                     <div class="row d-flex align-items-center justify-content-between pb-2">
                         <h1>Próximas consultas</h1>
                         <div>
-                            <a href="{{redirect()->back()}}" class="btn btn-primary">Volver</a>
+                            <a href="{{ url('/') }}" class="btn btn-primary">Volver</a>
                             <a href="{{route('inscriptions_user.create')}}" class="btn btn-primary">Nueva inscripción</a>
                         </div>
                     </div>
