@@ -98,14 +98,14 @@
             </div>
         </nav>
 
-        <main class="my-5">
+        <main class="my-5" style="height: 100vh">
             @yield('content')
         </main>
 
-        <footer class="bg-info p-3 bg-dark text-white" >
-            <div class="container-fluid text-center text-md-left">
+        <footer class="w-100  bg-dark text-white pt-5 pb-3">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6 mt-md-0 mt-3">
+                    <div class="col-xs-12 col-sm-6 col-md-4 footers-one ">
                         <h5 class="text-uppercase">Puede interesarte:</h5>
                 
                         <ul class="list-unstyled d-flex justify-content-start">
@@ -123,8 +123,6 @@
                 </div>
             </div>
         </footer>
-    </div>
     @yield('js-script')
-
 </body>
 </html>

@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 @if($meetings->count() > 0)
-                    <table class="table table-sm table-hover">
+                    <table class="table table-sm table-hover table-responsive-md">
                         <thead>
                         <tr>
                             <th scope="col">Materia</th>
