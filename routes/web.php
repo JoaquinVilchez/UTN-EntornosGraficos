@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\MeetingController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,10 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('home');
+});
+
+Route::get('/mario', function() {
+    return Hash::make('12345678');
 });
 
 Auth::routes();
@@ -63,10 +68,12 @@ Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destr
 
 //Inscripciones
 Route::get('/mis-inscripciones', [InscriptionController::class, 'list'])->name('inscriptions_user.list');
-Route::post('/mis-inscripciones/cancelar/', [InscriptionController::class, 'cancel'])->name('inscription.cancel');
-Route::get('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_subject'])->name('inscriptions.select_subject');
-Route::post('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_teacher_for_subject'])->name('inscriptions.select_teacher_for_subject');
-Route::post('/inscripciones/nueva/ver-consultas', [InscriptionController::class, 'view_meetings'])->name('inscriptions.view_meetings');
+Route::post('/mis-inscripciones/cancelar/', [InscriptionController::class, 'cancel'])->name('inscriptions_user.cancel');
+Route::get('/inscripciones/nueva/seleccionar-materia', [InscriptionController::class, 'select_subject'])->name('inscriptions_user.select_subject');
+Route::get('/inscripciones/nueva', [InscriptionController::class, 'create'])->name('inscriptions_user.create');
+Route::post('/inscripciones/nueva/seleccionar-docente', [InscriptionController::class, 'selectTeacher'])->name('inscriptions_user.select_teacher');
+Route::post('/inscripciones/nueva/seleccionar-consulta', [InscriptionController::class, 'selectMeeting'])->name('inscriptions_user.select_meeting');
+Route::post('/inscripciones/nueva/', [InscriptionController::class, 'store'])->name('inscriptions_user.store');
 
 //Consultas
 Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');
