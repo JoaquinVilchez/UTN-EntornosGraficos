@@ -13,7 +13,9 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    { 
+
+
         $subjects = Subject::paginate(10); //Trabajamos la baja de materias como banderas
        
         return view('subjects.list')->with('subjects', $subjects);

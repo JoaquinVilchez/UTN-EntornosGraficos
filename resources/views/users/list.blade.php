@@ -5,16 +5,16 @@
       <div class="row">
           @include('elements.messages')
             <div class="col-12">
-              <div class="d-flex justify-content-between mb-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
                 <h1>Usuarios</h1>
                 <a href="{{route('user.create')}}" class="btn btn-primary">Nuevo</a>
               </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-hover">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Legajo</th>
-                        <th scope="col">Nombre y apellido</th>
+                        <th scope="col">Nombre completo</th>
                         <th scope="col">Email</th>
                         <th scope="col">Rol</th>
                         <th scope="col"></th>

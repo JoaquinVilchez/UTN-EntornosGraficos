@@ -17,35 +17,50 @@ class SubjectUserSeeder extends Seeder
     public function run()
     {
 
-        $users= User::all();
+        $teachers= User::all()->where('type', 'teacher');
+        $students= User::all()->where('type', 'student'); 
 
         $subjects = Subject::all();
         $roles = ['titular', 'alternate'];
-        $conditions = ['not_enrolled','enrolled', 'regular', 'approved']; 
+        $conditions = ['enrolled', 'regular', 'approved']; 
 
-        for ($i = 0; $i < count($subjects); $i++) {
+        foreach($subjects as $subject){
 
-            $user = $users->random(1)->first();
-            $subject = $subjects->random(1)->first();
-            $role = null;
+            //Se insertan docentes para la materia
+            for ($i = 0; $i < 1; $i++) {
 
-            
-            if($user->type == 'teacher'){
-
+                $user = $teachers->random(1)->first();
                 $role = $roles[rand(0, 1)];
                 $condition = null;
-            }
-            else if($user->type == 'student'){
-                $condition = $conditions[rand(0,3)];   
-                
+
+
+                DB::table('subject_user')->insert([
+                    'user_id' => $user->id,
+                    'subject_id' => $subject->id,
+                    'role' => $role,
+                    'status' =>$condition,
+                ]);
             }
 
-            DB::table('subject_user')->insert([
-                'user_id' => $user->id,
-                'subject_id' => $subject->id,
-                'role' => $role,
-                'status' =>$condition,
-            ]);
+            //Se insertan alumnos para la materia
+            for($i=0; $i<3; $i++){
+
+                $user = $students->random(1)->first();
+                $role = null;
+                $condition = $conditions[rand(0,2)];   
+
+
+                DB::table('subject_user')->insert([
+                    'user_id' => $user->id,
+                    'subject_id' => $subject->id,
+                    'role' => $role,
+                    'status' =>$condition,
+                ]);
+
+            }
+
+
         }
+
     }
 }

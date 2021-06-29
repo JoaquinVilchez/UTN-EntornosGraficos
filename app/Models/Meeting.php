@@ -13,26 +13,64 @@ class Meeting extends Model
 
     public function subject()
     {
-        return $this->hasOne(Subject::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function teacher()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function inscription()
+    public function inscriptions()
     {
         return $this->hasMany(Inscription::class);
     }
 
+    public function canceledMeetings()
+    {
+        return $this->hasMany(CanceledMeetings::class);
+    }
 
-    // $consulta = Meeting::find(1);
+    public function getState()
+    {
+        $state = $this->status;
 
-    // $consulta->user;
+        if ($state == 'canceled') {
+            return '<span class="badge badge-danger">Cancelado</span>';
+        }
 
+        if ($state == 'active') {
+            return '<span class="badge badge-success">Activo</span>';
+        }
+    }
 
+    public function getType()
+    {
+        $type = $this->type;
 
+        if ($type == 'face-to-face') return 'Presencial';
 
+        if ($type == 'virtual') return 'Virtual';
+    }
 
+    public function getDayAndHour()
+    {
+        $weekDays = [
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado',
+            0 => 'Domingo'
+        ];
+
+        return $weekDays[$this->day] . ' a las ' . $this->hour . 'hs';
+    }
+
+    public function getExcelDayAndHour()
+    {
+        $weekDays = getSpanishWeekDays();
+        return $weekDays[$this->day] . ' - ' . $this->hour;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,14 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
+
+    public function getTeachersFromSubject(Request $request)
+    {
+        $subject = Subject::find($request->subjectId);
+        $teachers = $subject->teachers();
+        return $teachers;
+    }
+
     /**
      * Display a home view of users.
      *
@@ -16,7 +25,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.userHome');
+        return view('home');
     }
 
     /**
@@ -26,7 +35,7 @@ class UserController extends Controller
      */
     public function list()
     {
-        $users = User::where('status', 'active')->paginate(10);
+        $users = User::where('status', 'active')->orderBy('last_name', 'asc')->paginate(10);
         return view('users.list')->with('users', $users);
     }
 
@@ -68,7 +77,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return redirect()->route('user.list')->with('success_message', 'Usuario creado con éxito');
+        return redirect()->route('user.index')->with('success_message', 'Usuario creado con éxito');
     }
 
     /**
@@ -122,7 +131,7 @@ class UserController extends Controller
             'type' => $request->type,
         ]);
 
-        return redirect()->route('user.list')->with('success_message', 'Usuario editado con éxito');
+        return redirect()->route('user.index')->with('success_message', 'Usuario editado con éxito');
     }
 
     /**
@@ -145,9 +154,9 @@ class UserController extends Controller
                 $user->delete();
             }
 
-            return redirect()->route('user.list')->with('success_message', $userType . ' eliminado con éxito.');
+            return redirect()->route('user.index')->with('success_message', $userType . ' eliminado con éxito.');
         } catch (\Throwable $th) {
-            return redirect()->route('user.list')->with('error_message', 'Hubo un problema y no pudimos eliminar al usuario.');
+            return redirect()->route('user.index')->with('error_message', 'Hubo un problema y no pudimos eliminar al usuario.');
         }
     }
 }
