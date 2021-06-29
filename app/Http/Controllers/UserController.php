@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,14 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
+
+    public function getTeachersFromSubject(Request $request)
+    {
+        $subject = Subject::find($request->subjectId);
+        $teachers = $subject->teachers();
+        return $teachers;
+    }
+
     /**
      * Display a home view of users.
      *

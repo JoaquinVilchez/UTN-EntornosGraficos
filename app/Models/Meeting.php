@@ -26,40 +26,51 @@ class Meeting extends Model
         return $this->hasMany(Inscription::class);
     }
 
-    public function canceledMeetings(){
+    public function canceledMeetings()
+    {
         return $this->hasMany(CanceledMeetings::class);
-
     }
 
     public function getState()
     {
-        $state = $this->state;
+        $state = $this->status;
 
-        if($state == 'canceled'){
-            return 'Cancelado';
+        if ($state == 'canceled') {
+            return '<span class="badge badge-danger">Cancelado</span>';
         }
-        
-        if($state == 'active'){
-            return 'Activo';
-        }        
 
+        if ($state == 'active') {
+            return '<span class="badge badge-success">Activo</span>';
+        }
     }
 
-    public function getType(){
+    public function getType()
+    {
         $type = $this->type;
 
-        if($type == 'face-to-face') return 'Presencial';
+        if ($type == 'face-to-face') return 'Presencial';
 
-        if($type == 'virtual') return 'Virtual';
+        if ($type == 'virtual') return 'Virtual';
     }
-
 
     public function getDayAndHour()
     {
-        $weekDays = getSpanishWeekDays();
-        return $weekDays[$this->day] . ' a las ' . $this->hour . 'hs';
+        $weekDays = [
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado',
+            0 => 'Domingo'
+        ];
 
-        //
+        return $weekDays[$this->day] . ' a las ' . $this->hour . 'hs';
     }
 
+    public function getExcelDayAndHour()
+    {
+        $weekDays = getSpanishWeekDays();
+        return $weekDays[$this->day] . ' - ' . $this->hour;
+    }
 }

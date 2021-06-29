@@ -46,6 +46,7 @@ Route::post('/usuarios/store', [UserController::class, 'store'])->name('user.sto
 Route::get('/usuarios/editar/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/usuarios/editar/{id}', [UserController::class, 'update'])->name('user.update');
 Route::post('/usuarios/eliminar', [UserController::class, 'destroy'])->name('user.destroy');
+Route::post('/materia/docentes', [UserController::class, 'getTeachersFromSubject'])->name('user.getTeachersFromSubject');
 
 Route::get('/docentes', [SubjectUserController::class, 'search_teacher'])->name('users.search_teacher');
 
@@ -74,7 +75,5 @@ Route::post('/inscripciones/nueva/seleccionar-docente', [InscriptionController::
 Route::post('/inscripciones/nueva/seleccionar-consulta', [InscriptionController::class, 'selectMeeting'])->name('inscriptions_user.select_meeting');
 Route::post('/inscripciones/nueva/', [InscriptionController::class, 'store'])->name('inscriptions_user.store');
 
-
-//Consultas
 Route::get('/mis-consultas', [InscriptionController::class, 'my_meetings_list'])->name('inscriptions_user.my_meetings_list');
 
