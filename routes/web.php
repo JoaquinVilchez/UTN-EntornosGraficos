@@ -75,5 +75,6 @@ Route::post('/inscripciones/nueva/seleccionar-consulta', [InscriptionController:
 Route::post('/inscripciones/nueva/', [InscriptionController::class, 'store'])->name('inscriptions_user.store');
 
 
-
+//Consultas
+Route::get('/mis-consultas', [InscriptionController::class, 'my_meetings_list'])->name('inscriptions_user.my_meetings_list');
 
