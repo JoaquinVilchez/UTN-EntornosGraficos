@@ -166,11 +166,7 @@
                                         </div>
                                     </div>
                                     
-                                @endforeach
-
-                                <p>No se encontraron consultas realizadas.</p>
-                            
-                            
+                                @endforeach                            
                         </div>
                     </div>
                     @endif
