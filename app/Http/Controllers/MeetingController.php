@@ -184,9 +184,11 @@ class MeetingController extends Controller
 
         $meeting = Meeting::findOrFail($meeting_id);
         $datetime = new Carbon($datetime);
-        $inscriptions = $meeting->inscriptions->where('inscriptions.datetime', $datetime);
-
-        return view('meetings.view_meetings_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions);
+        $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d h:i:s'));
+        
+        return view('meetings.view_meeting_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions)->with('datetime',$datetime);
+        
+    
         }catch(Throwable $th)
         {
             return view('meetings.list')->with('error_message', 'Error. No se puede acceder a la consulta solicitada.');                        

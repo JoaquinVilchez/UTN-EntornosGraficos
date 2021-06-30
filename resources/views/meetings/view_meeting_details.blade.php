@@ -11,16 +11,17 @@
                         <div class="card-body">
                           <p class="card-text">
                                 Materia: {{$meeting->subject->name}}<br>
-                                Año: {{$meeting->$subject->level}} <br>
-                                Carrera: {{$meeting->$subject->career}}<br>
-                                Tipo: {{$meeting->getType()}}
+                                Año: {{$meeting->subject->level}} <br>
+                                Carrera: {{$meeting->subject->career}}<br>
+                                Tipo: {{$meeting->getType()}} <br>
                                 @if ($meeting->type == 'virtual')
-                                    Link: {{$meeting->meeting_url}}
+                                    Link: <a href="{{$meeting->meeting_url}}">{{$meeting->meeting_url}}</a>
+                                @endif
                                 @if ($meeting->type == 'face-to-face')
                                     Aula: {{$meeting->classroom}}                                                                    
                                 @endif
                                 <br>
-                                Estado: {{$meeting->getState()}}
+                                Estado: {!!$meeting->getState()!!}
 
                           </p>
                         </div>
@@ -47,10 +48,12 @@
                                 <td>{{$inscription->student->getFullName()}}</td>
                                 <td>{{$inscription->student->university_id}}</td>
                                 <td>{{$inscription->student->email}}</td>
-                                <td>{{$inscription->student->getStatusofSubjectSpanish($inscription->subject->id)}}</td>
-                                <td>{{$inscription->getState())}}</td>
+                                <td>{{$inscription->student->getStatusofSubjectSpanish($inscription->meeting->subject->id)}}</td>
+                                <td>{{$inscription->getState()}}</td>
                                 </tr>
                             @endforeach
+
+                            
                         </tbody>
                     </table>
                     @endif
