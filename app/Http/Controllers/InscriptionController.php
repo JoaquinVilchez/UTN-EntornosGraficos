@@ -2,63 +2,149 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CanceledMeetings;
 use App\Models\Inscription;
 use App\Models\Meeting;
 use App\Models\Subject;
 use App\Models\User;
 use DateTime;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Validation\ValidationException;
+use PhpParser\Node\Expr\Cast\Array_;
 use Throwable;
 
 class InscriptionController extends Controller
 {
 
-    public function select_subject()
+    public function create()
+    {
+
+        if(Auth::check())
+        {
+            $user = Auth::user();
+            $subjects = $user->subjects;
+            return view('inscriptions_user.create')->with('subjects', $subjects);  
+        }
+
+        else{
+            return redirect()->route('login')->with('error_message', 'Para poder inscribirte a una materia debes loguearte previamente.');  
+        }
+
+
+    }
+
+    public function selectTeacher(Request $request) 
+    {
+       $subject = Subject::find($request->subjectId);
+       $teachers = $subject->teachers(); 
+
+       return $teachers;
+    }
+
+    public function selectMeeting(Request $request) 
+    {
+
+       $dates = new Collection();
+       $output = '';
+       $meetings = Meeting::where('teacher_id', $request->teacherId)->where('subject_id', $request->subjectId)->get(); 
+       foreach($meetings as $meeting) {  
+           
+                $dayName = getDayName($meeting->day);   
+                $date = Carbon::now()->next($dayName)->setTimeFromTimeString($meeting->hour);
+
+                //for next 3 weeks 
+                for($i=1; $i<=4; $i++){
+
+                    $canceledMeetings = CanceledMeetings::all()->where('meeting_id', $meeting->id)->where('datetime', $date->format('Y-m-d H:i:s'));
+
+                    if(! $canceledMeetings->first()) //not canceled meeting
+                    {
+                        $dates->push($date->copy());          
+                    }   
+        
+                    $date->addWeek(1);
+                }  
+
+            }
+        
+
+        $sorted_dates = collect($dates)->sortBy(function ($date, $key) {
+           return $date;
+       });
+
+       
+        foreach($sorted_dates as $date)
+        {
+            $output .= '<div class="custom-control custom-radio">
+            <input type="radio" id="'.$date.'" value="'.$date.'" name="datetime"  class="custom-control-input">
+            <label class="custom-control-label" for="'.$date.'">'.$date.'</label>
+            </div>';
+        }
+
+
+        if($output == ''){
+            $output .= '<div class="custom-control">No hay consultas existentes para el docente seleccionado.</div>';
+        }
+
+        echo $output;   
+    }
+
+    public function store(Request $request)
     {
         $user = Auth::user();
-        $subjects = $user->subjects;
+        $subjects = Subject::all()->where('user_id', $user->id);
 
-        return view('inscriptions_user.select_subject')->with('subjects', $subjects);
-    }
+        try{
 
-    public function select_teacher_for_subject(Request $request)
-    {
+            $subject = Subject::findOrFail($request->subjects);
+            $teacher = User::findOrFail($request->teachers);
+            $datetime = $request->datetime;
+            $student = Auth::user();
 
-        $subject = Subject::find($request->subject_id);
-        $teachers = $subject->teachers(); 
-        return view('inscriptions_user.select_teacher_for_subject')->with('teachers', $teachers)->with('subject', $subject);
-    }
+            $day = Carbon::parse($datetime)->dayOfWeek;
+            $hour = Carbon::parse($datetime)->format('H:i');
 
-    public function view_meetings(Request $request)
-    {
-        try
-        {
-            $subject = Subject::find($request->subject_id);
-            $teacher = User::find($request->teacher_id);
-            $teachers_of_subject = $subject->teachers();
-            if(count($teachers_of_subject->whereIn('id', $teacher->id)) != 1){
+            $meeting = Meeting::where('subject_id', $subject->id)->where('teacher_id', $teacher->id)->where('day', $day)->where('hour', $hour);
+            
+            if($meeting->first()){
+
+                $exists_inscriptions = Inscription::all()->where('meeting_id', $meeting->first()->id)->where('datetime', $datetime);
+                if($exists_inscriptions->first()){
+
+                    return redirect()->route('inscriptions_user.list')->with('error_message', 'Usted ya se encuentra inscripto a la consulta seleccionada');
+                }
+
+                else{
+
                 
-                return redirect()->route('inscriptions.select_subject')->with('error_message', 'Hubo un problema al seleccionar el docente y materia');
-                
+                    Inscription::create([
+                        'datetime' => $datetime,
+                        'status' => 'active',
+                        'student_id' => $student->id,
+                        'meeting_id' => $meeting->first()->id
+                    ]);
+
+                    return redirect()->route('inscriptions_user.list')->with('success_message', 'Se ha inscripto a la consulta de manera satisfactoria.');
+                }
+
             }
-            else
-            {
-                /*Buscar consultas para el docente*/
-                $meetings = Meeting::all()->where('teacher_id', $teacher->id)->where('subject_id', $subject->id);
-                return redirect()->route('inscriptions.view_meetings')->with($meetings);
+            else{
+                return redirect()->route('inscriptions_user.create')->with('error_message', 'No se ha podido encontrar la consulta seleccionada.');
             }
 
-        }
-        catch(Throwable $th){
-                return redirect()->route('inscriptions.select_subject')->with('error_message', 'Hubo un problema al seleccionar el docente y materia');
 
+
+        }catch(Exception $th){
+
+            return redirect()->route('inscriptions_user.create')->with('error_message', 'Ha habido un error y no se ha podido incribirse a la consulta.');                
         }
 
     }
-    
 
 
 
@@ -69,7 +155,7 @@ class InscriptionController extends Controller
             $user = Auth::user();
             $inscription = Inscription::find($request->inscriptionid);
 
-            $datetime = new DateTime($inscription->meeting->datetime);
+            $datetime = new DateTime($inscription->datetime);
             $tomorrow = new DateTime('+1 day');
 
 
@@ -81,7 +167,7 @@ class InscriptionController extends Controller
 
 
             $inscription->update([
-                'state' => 'canceled',
+                'status' => 'canceled',
 
             ]);
 
@@ -94,30 +180,47 @@ class InscriptionController extends Controller
 
     public function list(Request $request)
     {
-        $orderbyDate = 'ASC';
+        $orderDescending = false;
 
         if ($request->orderbyDate != null) {
-            $orderbyDate = $request->orderbyDate;
+            
+            if($request->orderbyDate == 'DESC'){
+                $orderDescending = true;
+
+            } 
+        
         }
 
 
         $user = Auth::user();
         
 
-        if($user != null){
+        if(Auth::check()){
 
-            $today = new DateTime();
+            $today = new Carbon();
 
-            $inscriptions = Inscription::select('inscriptions.*')
-                ->join('meetings', 'meetings.id', '=', 'inscriptions.meeting_id')
-                ->orderby('meetings.datetime', $orderbyDate)
-                ->where('student_id', $user->id)
-                ->where('meetings.datetime', '>=', $today)
-                ->get()
+
+            $next_inscriptions = Inscription::all()
+                ->where('datetime', '>=', $today)
+                ->sortBy('datetime', SORT_REGULAR, $orderDescending)
                 ->unique();
 
-            return  view('inscriptions_user.list')->with('inscriptions', $inscriptions)->with('user', $user);
+            $previous_inscriptions = Inscription::all()
+                ->where('datetime', '<', $today)
+                ->sortBy('datetime', SORT_REGULAR, $orderDescending)
+                ->unique();
+
+            return  view('inscriptions_user.list')->with('next_inscriptions', $next_inscriptions)->with('previous_inscriptions', $previous_inscriptions)->with('user', $user);
         }
         else return redirect()->route('login');
     }
+
+    public function test($subject_id, $teacher_id)
+    {     
+                  
+
+    }
+    
 }
+            
+
