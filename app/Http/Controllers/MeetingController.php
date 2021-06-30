@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\MeetingsExport;
 use App\Imports\MeetingsImport;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class MeetingController extends Controller
 {
@@ -156,4 +159,43 @@ class MeetingController extends Controller
 
         return redirect()->route('meetings.list')->with('success_message', 'Importado con éxito');
     }
+
+    public function my_meetings(){
+        
+        if(Auth::check()){
+            $user = Auth::user();
+
+            if($user->type == 'teacher'){
+                
+                $next_meetings = $user->meetings;
+                return view('meetings.my_meetings')->with('user', $user)->with('next_meetings', $next_meetings);
+            }
+
+            else{
+                return view('home')->with('error_message', 'Usted no posee permisos para acceder a esta página');
+            }
+
+        }
+    }
+
+    public function meeting_details($meeting_id, $datetime)
+    {
+        try{
+
+        $meeting = Meeting::findOrFail($meeting_id);
+        $datetime = new Carbon($datetime);
+        $inscriptions = $meeting->inscriptions->where('inscriptions.datetime', $datetime);
+
+        return view('meetings.view_meetings_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions);
+        }catch(Throwable $th)
+        {
+            return view('meetings.list')->with('error_message', 'Error. No se puede acceder a la consulta solicitada.');                        
+        }
+
+
+
+    }
+
+
+   
 }

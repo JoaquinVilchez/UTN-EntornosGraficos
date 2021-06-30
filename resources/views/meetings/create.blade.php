@@ -137,7 +137,7 @@
             const selectTeachers = $("#teachers");
             selectTeachers.find('option').remove();
             $.ajax({
-                url : '/materia/docentes',
+                url : "{{route('user.getTeachersFromSubject')}}",
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'

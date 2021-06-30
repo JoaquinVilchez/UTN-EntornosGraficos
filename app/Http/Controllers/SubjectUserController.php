@@ -233,8 +233,8 @@ class SubjectUserController extends Controller
     public function view_subjects_info($id_subject)
     {
         $subject = Subject::find($id_subject);
-        $teachers = $subject->teachers()->unique();
-        $students = $subject->students()->unique();
+        $teachers = $subject->teachers();
+        $students = $subject->students();
         return view('subjects_user.view_subject_info')->with('subject', $subject)->with('teachers', $teachers)->with('students', $students);
     }
 

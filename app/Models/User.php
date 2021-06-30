@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function meetings()
     {
-        return $this->hasMany(Meeting::class);
+        return $this->HasMany(Meeting::class, 'teacher_id');
     }
 
     public function subjects()

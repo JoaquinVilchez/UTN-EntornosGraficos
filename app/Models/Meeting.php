@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -72,5 +74,37 @@ class Meeting extends Model
     {
         $weekDays = getSpanishWeekDays();
         return $weekDays[$this->day] . ' - ' . $this->hour;
+    }
+
+
+    public function next_meetings($cant)
+    {
+
+        $dates = new Collection();
+        $dayName = getDayName($this->day);   
+        $date = Carbon::now()->next($dayName)->setTimeFromTimeString($this->hour);
+        
+        for($i=1; $i<=$cant; $i++){
+
+            $dates->push($date->copy());          
+            $date->addWeek(1);
+        } 
+
+        return $dates;
+
+    }
+
+    public function isActiveForDate($date)
+    {
+        $canceledMeetings = CanceledMeetings::all()->where('meeting_id', $this->id)->where('datetime', $date->format('Y-m-d H:i:s'));
+
+        if(! $canceledMeetings->first()) //not canceled meeting
+        {
+            return true;   
+        }   
+
+        else return false;
+
+
     }
 }
