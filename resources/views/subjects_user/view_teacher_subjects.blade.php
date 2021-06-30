@@ -14,7 +14,7 @@
               <div class="d-flex justify-content-between mb-2">
               <h3>Materias</h3>
               </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">Año</th>

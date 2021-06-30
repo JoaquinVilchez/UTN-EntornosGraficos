@@ -9,7 +9,7 @@
                 <h1>Materias para el {{strtolower($user->getType())}} {{$user->getFullName()}}</h1>
                 <a class="btn btn-primary" href="{{ route('subjects_user.edit', $user->id) }}">Editar</a>
               </div>
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
