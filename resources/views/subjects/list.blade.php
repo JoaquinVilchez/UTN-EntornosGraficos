@@ -11,7 +11,7 @@
                         <div class="ml-auto"><a href="{{route('subject.create')}}" type="button" class="btn btn-primary">Nueva materia</a></div>
                     </div>
                 </div>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">#</th>

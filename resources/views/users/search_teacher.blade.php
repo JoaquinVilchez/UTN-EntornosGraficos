@@ -15,7 +15,7 @@
                     <button type="submit" class="btn btn-primary mb-2">Buscar</button>
                 </form>
               </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">#</th>

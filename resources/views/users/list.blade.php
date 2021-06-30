@@ -9,7 +9,7 @@
                 <h1>Usuarios</h1>
                 <a href="{{route('user.create')}}" class="btn btn-primary">Nuevo</a>
               </div>
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -71,7 +71,6 @@
 
 @section('js-script')
     <script>
-
       $('#deleteModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget)
 

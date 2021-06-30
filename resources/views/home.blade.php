@@ -20,7 +20,6 @@
     </div>
 
     <div class="container vh-50">
-
         <div class="row">
             <div class="col-sm">
                 <div class="row justify-content-center">
