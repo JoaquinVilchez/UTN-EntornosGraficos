@@ -3,16 +3,17 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="container d-flex justify-content-center">
-                <div class="col-12">
-                    @include('elements.messages')
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h2>Mis próximas consultas</h2>
-                        <div>
-                            <a href="{{redirect()->back()}}" class="btn btn-dark">Volver</a>
-                            <a href="{{route('meetings.history')}}" class="btn btn-primary">Ver historial</a>
-                        </div>
+            <div class="col-12">
+                @include('elements.messages')
+                <div class="d-flex justify-content-between align-items-center mb-2 nav-tabs">
+                    <h1>Mis próximas consultas</h1>
+                    <div>
+                        <a href="{{ url('/') }}" class="btn btn-dark">Volver</a>
+                        <a href="{{route('meetings.history')}}" class="btn btn-primary">Ver historial</a>
                     </div>
+                </div>
+
+                <div class="mt-4">
                     @if($next_meetings->count() > 0)
 
                         @php $i=0; @endphp
@@ -95,7 +96,6 @@
                         @endforeach
 
                     @endif
-
                 </div>
             </div>
         </div>
