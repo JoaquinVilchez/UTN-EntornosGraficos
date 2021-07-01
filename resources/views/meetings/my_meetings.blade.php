@@ -74,7 +74,7 @@
                                                     </td>
                                                     <td>
 
-                                                        <a class="" href="{{route('meetings.meeting_details', [$meeting->id, $date->format('Y-m-d h:i')])}}"> Ver detalles</a>
+                                                        <a class="mr-4" href="{{route('meetings.meeting_details', [$meeting->id, $date->format('Y-m-d h:i')])}}"> Ver detalles</a>
 
                                                         @if ($meeting->isActiveForDate($date))
                                                             <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal" data-meetingid="{{$meeting->id}}" data-datetime="{{$date}}">Cancelar</a>
