@@ -28,7 +28,7 @@
                                         </button>
                                         </h5>
                                     </div>
-                                        
+
                                     <div id="collapse{{$i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                                         <div class="card-body">
                                             <table class="table table-sm table-hover">
@@ -43,10 +43,9 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                        
-                
+
                                                 @php $dates = $meeting->next_meetings(5) @endphp
-                
+
                                                 @foreach ($dates as $date)
                                                 <tr>
                                                     <td>{{$date->format('d-m-Y h:i')}}</td>
@@ -67,7 +66,7 @@
                                                     </td>
                                                     <td>
                                                         @if ($meeting->isActiveForDate($date))
-                                                            <span class="badge badge-success">Activo</span>                                                        
+                                                            <span class="badge badge-success">Activo</span>
                                                         @else
                                                             <span class="badge badge-danger">Cancelado</span>
                                                         @endif
@@ -77,14 +76,13 @@
                                                         <a class="" href="{{route('meetings.meeting_details', [$meeting->id, $date->format('Y-m-d h:i')])}}"> Ver detalles</a>
 
                                                         @if ($meeting->isActiveForDate($date))
-                                                            <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" >Cancelar</a>
+                                                            <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal" data-meetingid="{{$meeting->id}}">Cancelar</a>
                                                         @endif
                                                     </td>
                                                     </tr>
-                    
-                                                    
+
                                                 @endforeach
-                
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -95,7 +93,7 @@
                             @php $i++; @endphp
 
                         @endforeach
-                    
+
                     @endif
 
                 </div>
@@ -105,11 +103,11 @@
 
 
   <!-- Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Cancelar Consulta</h5>
+          <h5 class="modal-title" id="cancelModalLabel">Cancelar Consulta</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -117,7 +115,7 @@
       <form action="{{route('meetings.cancel')}}" method="POST">
         @csrf
           <div class="modal-body">
-              <input type="hidden" value="" id="userid" name="userid">
+              <input type="hidden" value="" id="meetingid" name="meetingid">
               ¿Estás seguro de que desea cancelar esta consulta?
           </div>
           <div class="modal-footer">
@@ -132,7 +130,7 @@
 
 @section('js-script')
     <script>
-        $('#deleteMeetingModal').on('show.bs.modal', function(event){
+        $('#cancelModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget)
 
         var meetingid = button.data('meetingid')

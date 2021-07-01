@@ -160,72 +160,65 @@ class MeetingController extends Controller
         return redirect()->route('meetings.list')->with('success_message', 'Importado con éxito');
     }
 
-    public function my_meetings(){
-        
-        if(Auth::check()){
+    public function my_meetings()
+    {
+
+        if (Auth::check()) {
             $user = Auth::user();
 
-            if($user->type == 'teacher'){
-                
+            if ($user->type == 'teacher') {
+
                 $next_meetings = $user->meetings;
                 return view('meetings.my_meetings')->with('user', $user)->with('next_meetings', $next_meetings);
-            }
-
-            else{
+            } else {
                 return view('home')->with('error_message', 'Usted no posee permisos para acceder a esta página');
             }
-
         }
     }
 
     public function meeting_details($meeting_id, $datetime)
     {
-        try{
+        try {
 
-        $meeting = Meeting::findOrFail($meeting_id);
-        $datetime = new Carbon($datetime);
-        $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d h:i:s'));
-        
-        return view('meetings.view_meeting_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions)->with('datetime',$datetime);
-        
-    
-        }catch(Throwable $th)
-        {
-            return view('meetings.list')->with('error_message', 'Error. No se puede acceder a la consulta solicitada.');                        
+            $meeting = Meeting::findOrFail($meeting_id);
+            $datetime = new Carbon($datetime);
+            $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d h:i:s'));
+
+            return view('meetings.view_meeting_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions)->with('datetime', $datetime);
+        } catch (Throwable $th) {
+            return view('meetings.list')->with('error_message', 'Error. No se puede acceder a la consulta solicitada.');
         }
-
-
-
     }
 
     public function cancel(Request $request)
     {
+        $user = Auth::user();
+        $meeting = Meeting::find($request->meetingid);
 
-        try {
-            $user = Auth::user();
-            $meeting = Meeting::find($request->meetingid);
+        dd($meeting);
 
-            $datetime = new DateTime($meeting->datetime);
-            $tomorrow = new DateTime('+1 day');
+        //Habria que detectar de alguna manera la consulta seleccionada, ya que no esta registrada en base de datos como para saber cual de las 5
+        //se selecciono... Una vez detectado eso, hay que verificar que no sean 24hs antes (O si...) y cancelar la consulta agregandola a la BD de
+        //cancelaciones como dijo Gera...
 
-
-
-            if ($datetime < $tomorrow) {
-
-                return redirect()->route('meetings.list')->with('error_message', 'Sólo se puede cancelar la consultas con anticipación de 24hs.');
-            }
+        //Aca hay que usar Carbon en vez de new Datetime (Mas facil).
+        $datetime = new DateTime($meeting->datetime);
+        $tomorrow = new DateTime('+1 day');
 
 
-            $meeting->update([
-                'status' => 'canceled',
 
-            ]);
+        if ($datetime < $tomorrow) {
 
-
-            return redirect()->route('meetings.list')->with('success_message', 'Se ha cancelado la consulta satisfactoriamente.');
-        } catch (\Throwable $th) {
-            return redirect()->route('meetings.list')->with('error_message', 'Hubo un error al intentar cancelar la consulta.');
+            return redirect()->route('meetings.list')->with('error_message', 'Sólo se puede cancelar la consultas con anticipación de 24hs.');
         }
+
+
+        $meeting->update([
+            'status' => 'canceled',
+
+        ]);
+
+
+        return redirect()->route('meetings.list')->with('success_message', 'Se ha cancelado la consulta satisfactoriamente.');
     }
-   
 }
