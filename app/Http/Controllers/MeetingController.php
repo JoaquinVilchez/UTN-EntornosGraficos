@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\MeetingsExport;
 use App\Imports\MeetingsImport;
+use App\Models\CanceledMeetings;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
@@ -160,44 +162,115 @@ class MeetingController extends Controller
         return redirect()->route('meetings.list')->with('success_message', 'Importado con éxito');
     }
 
-    public function my_meetings(){
-        
-        if(Auth::check()){
+    public function my_meetings()
+    {
+
+        if (Auth::check()) {
             $user = Auth::user();
 
-            if($user->type == 'teacher'){
+            if ($user->type == 'teacher') {
                 
                 $next_meetings = $user->meetings;
                 return view('meetings.my_meetings')->with('user', $user)->with('next_meetings', $next_meetings);
-            }
-
-            else{
+            } else {
                 return view('home')->with('error_message', 'Usted no posee permisos para acceder a esta página');
             }
-
         }
     }
 
     public function meeting_details($meeting_id, $datetime)
     {
+        try {
+
+            $meeting = Meeting::findOrFail($meeting_id);
+            $datetime = new Carbon($datetime);
+            $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d H:i:s'));
+
+            return view('meetings.view_meeting_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions)->with('datetime', $datetime);
+        } catch (Throwable $th) {
+            return view('meetings.list')->with('error_message', 'Error. No se puede acceder a la consulta solicitada.');
+        }
+    }
+
+    public function cancel(Request $request)
+    {
+
         try{
 
-        $meeting = Meeting::findOrFail($meeting_id);
-        $datetime = new Carbon($datetime);
-        $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d h:i:s'));
-        
-        return view('meetings.view_meeting_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions)->with('datetime',$datetime);
-        
+
+            $user = Auth::user();
+            $meeting = Meeting::find($request->meetingid);
+            $reason = $request->reason;
+            $alternative_date = $request->alternative_date;
+            $alternative_hour = $request->alternative_hour;
+            
+            $alternative_datetime = new Carbon("{$alternative_date} {$alternative_hour}");
+            
+            //valido que exista una fecha valida para la meeting mencionada
+            $datetime = new Carbon($request->datetime);
+            $day = $datetime->dayOfWeek;
+            $hour = $datetime->format('H:i');
     
-        }catch(Throwable $th)
+            $meeting_day = $meeting->day;
+            $meeting_hour = $meeting->hour;
+
+            $now = new Carbon();
+
+            if(($meeting_day == $day) && ($meeting_hour==$hour))
+            {
+
+                if($alternative_datetime > $now)
+                {
+                    CanceledMeetings::create([
+                        'datetime'=> $datetime,
+                        'alternative_datetime'=>$alternative_datetime,
+                        'reason' => $reason,
+                        'meeting_id' => $meeting->id
+                    ]);
+
+                    return redirect()->route('meetings.my_meetings')->with('success_message', "Se canceló la consulta del {$datetime} y se registró la consulta alternativa con su motivo de cancelación de manera satisfactoria."); 
+
+                }
+
+                else
+                {
+                    return redirect()->route('meetings.my_meetings')->with('error_message', "La fecha y hora alternativa no puede ser anterior al momento actual."); 
+                    
+                }
+                
+    
+            }
+
+    
+            else{
+                return redirect()->route('meetings.my_meetings')->with('error_message', 'Fecha y hora no válidas.');
+            }
+    
+        }
+        catch(Exception $e){
+            return redirect()->route('meetings.my_meetings')->with('error_message', 'Hubo un error y no se pudo cancelar la consulta.');
+        }
+    }
+
+
+    public function history()
+    {
+
+        if(Auth::check())
         {
-            return view('meetings.list')->with('error_message', 'Error. No se puede acceder a la consulta solicitada.');                        
+            $user = Auth::user();
+            if($user->type == 'teacher')
+            {
+                $meetings = $user->meetings;
+                return view('meetings.view_history')->with('meetings', $meetings);
+
+            }
+            else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
         }
 
-
+        else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
 
     }
 
 
-   
 }

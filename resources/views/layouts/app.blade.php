@@ -98,7 +98,7 @@
             </div>
         </nav>
 
-        <main class="my-5" style="height: 100vh">
+        <main class="my-5 scrollable-body" style="height: 100vh; ">
             @yield('content')
         </main>
 

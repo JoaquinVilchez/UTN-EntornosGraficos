@@ -28,7 +28,7 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/mario', function() {
+Route::get('/mario', function () {
     return Hash::make('12345678');
 });
 
@@ -86,4 +86,5 @@ Route::get('/consultas/exportar', [MeetingController::class, 'export'])->name('m
 Route::post('/consultas/importar', [MeetingController::class, 'import'])->name('meetings.import');
 Route::get('/mis-consultas', [MeetingController::class, 'my_meetings'])->name('meetings.my_meetings');
 Route::get('/consulta/{meeting_id}/{datetime}', [MeetingController::class, 'meeting_details'])->name('meetings.meeting_details');
-
+Route::post('/mis-consultas/cancelar', [MeetingController::class, 'cancel'])->name('meetings.cancel');
+Route::get('/mis-consultas/historial', [MeetingController::class, 'history'])->name('meetings.history');
