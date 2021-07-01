@@ -87,3 +87,4 @@ Route::post('/consultas/importar', [MeetingController::class, 'import'])->name('
 Route::get('/mis-consultas', [MeetingController::class, 'my_meetings'])->name('meetings.my_meetings');
 Route::get('/consulta/{meeting_id}/{datetime}', [MeetingController::class, 'meeting_details'])->name('meetings.meeting_details');
 Route::post('/mis-consultas/cancelar', [MeetingController::class, 'cancel'])->name('meetings.cancel');
+Route::get('/mis-consultas/historial', [MeetingController::class, 'history'])->name('meetings.history');

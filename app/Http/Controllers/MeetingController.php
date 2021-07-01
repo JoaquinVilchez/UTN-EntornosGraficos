@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\MeetingsExport;
 use App\Imports\MeetingsImport;
+use App\Models\CanceledMeetings;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
@@ -167,7 +169,7 @@ class MeetingController extends Controller
             $user = Auth::user();
 
             if ($user->type == 'teacher') {
-
+                
                 $next_meetings = $user->meetings;
                 return view('meetings.my_meetings')->with('user', $user)->with('next_meetings', $next_meetings);
             } else {
@@ -182,7 +184,7 @@ class MeetingController extends Controller
 
             $meeting = Meeting::findOrFail($meeting_id);
             $datetime = new Carbon($datetime);
-            $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d h:i:s'));
+            $inscriptions = $meeting->inscriptions->where('datetime', $datetime->format('Y-m-d H:i:s'));
 
             return view('meetings.view_meeting_details')->with('meeting', $meeting)->with('inscriptions', $inscriptions)->with('datetime', $datetime);
         } catch (Throwable $th) {
@@ -192,33 +194,83 @@ class MeetingController extends Controller
 
     public function cancel(Request $request)
     {
-        $user = Auth::user();
-        $meeting = Meeting::find($request->meetingid);
 
-        dd($meeting);
-
-        //Habria que detectar de alguna manera la consulta seleccionada, ya que no esta registrada en base de datos como para saber cual de las 5
-        //se selecciono... Una vez detectado eso, hay que verificar que no sean 24hs antes (O si...) y cancelar la consulta agregandola a la BD de
-        //cancelaciones como dijo Gera...
-
-        //Aca hay que usar Carbon en vez de new Datetime (Mas facil).
-        $datetime = new DateTime($meeting->datetime);
-        $tomorrow = new DateTime('+1 day');
+        try{
 
 
+            $user = Auth::user();
+            $meeting = Meeting::find($request->meetingid);
+            $reason = $request->reason;
+            $alternative_date = $request->alternative_date;
+            $alternative_hour = $request->alternative_hour;
+            
+            $alternative_datetime = new Carbon("{$alternative_date} {$alternative_hour}");
+            
+            //valido que exista una fecha valida para la meeting mencionada
+            $datetime = new Carbon($request->datetime);
+            $day = $datetime->dayOfWeek;
+            $hour = $datetime->format('H:i');
+    
+            $meeting_day = $meeting->day;
+            $meeting_hour = $meeting->hour;
 
-        if ($datetime < $tomorrow) {
+            $now = new Carbon();
 
-            return redirect()->route('meetings.list')->with('error_message', 'Sólo se puede cancelar la consultas con anticipación de 24hs.');
+            if(($meeting_day == $day) && ($meeting_hour==$hour))
+            {
+
+                if($alternative_datetime > $now)
+                {
+                    CanceledMeetings::create([
+                        'datetime'=> $datetime,
+                        'alternative_datetime'=>$alternative_datetime,
+                        'reason' => $reason,
+                        'meeting_id' => $meeting->id
+                    ]);
+
+                    return redirect()->route('meetings.my_meetings')->with('success_message', "Se canceló la consulta del {$datetime} y se registró la consulta alternativa con su motivo de cancelación de manera satisfactoria."); 
+
+                }
+
+                else
+                {
+                    return redirect()->route('meetings.my_meetings')->with('error_message', "La fecha y hora alternativa no puede ser anterior al momento actual."); 
+                    
+                }
+                
+    
+            }
+
+    
+            else{
+                return redirect()->route('meetings.my_meetings')->with('error_message', 'Fecha y hora no válidas.');
+            }
+    
+        }
+        catch(Exception $e){
+            return redirect()->route('meetings.my_meetings')->with('error_message', 'Hubo un error y no se pudo cancelar la consulta.');
+        }
+    }
+
+
+    public function history()
+    {
+
+        if(Auth::check())
+        {
+            $user = Auth::user();
+            if($user->type == 'teacher')
+            {
+                $meetings = $user->meetings;
+                return view('meetings.view_history')->with('meetings', $meetings);
+
+            }
+            else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
         }
 
+        else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
 
-        $meeting->update([
-            'status' => 'canceled',
-
-        ]);
-
-
-        return redirect()->route('meetings.list')->with('success_message', 'Se ha cancelado la consulta satisfactoriamente.');
     }
+
+
 }

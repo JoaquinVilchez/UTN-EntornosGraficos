@@ -21,7 +21,13 @@
                                     Aula: {{$meeting->classroom}}                                                                    
                                 @endif
                                 <br>
-                                Estado: {!!$meeting->getState()!!}
+                                Estado: {{$meeting->getStatusForDate($datetime)}} <br>
+
+                                @if (! $meeting->isActiveForDate($datetime))
+                                    Motivo de cancelación: {{$meeting->get_canceled_meeting_for_date($datetime)->reason}}<br>
+                                    Fecha alternativa de consulta: {{$meeting->get_canceled_meeting_for_date($datetime)->datetime}}<br>
+                                @endif
+                                
 
                           </p>
                         </div>
