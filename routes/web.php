@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Sitemap\SitemapGenerator;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,3 +90,10 @@ Route::get('/mis-consultas', [MeetingController::class, 'my_meetings'])->name('m
 Route::get('/consulta/{meeting_id}/{datetime}', [MeetingController::class, 'meeting_details'])->name('meetings.meeting_details');
 Route::post('/mis-consultas/cancelar', [MeetingController::class, 'cancel'])->name('meetings.cancel');
 Route::get('/mis-consultas/historial', [MeetingController::class, 'history'])->name('meetings.history');
+
+Route::get('sitemap', function(){
+    SitemapGenerator::create('http://entornosgraficos2021.tk/')->writeToFile('sitemap.xml');
+    return 'sitemap created';
+    
+});
+Route::view('/mapa', 'contact.sitemap')->name('contact.sitemap');
