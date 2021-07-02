@@ -141,7 +141,7 @@
             </main>
         </div>
 
-        <footer class="w-100  bg-dark text-white pt-5 pb-3"  style="z-index:1">
+        <footer class="w-100  bg-dark text-white pt-5 pb-3 position-absolute"  style="z-index:1">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-4 footers-one ">
