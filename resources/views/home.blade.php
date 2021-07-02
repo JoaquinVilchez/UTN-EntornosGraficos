@@ -65,9 +65,6 @@
             <div class="col-sm align-self-center pl-5">    
                 <h2 class="h2">CVG - Sistema de consultas<h2>
                 <p class="lead">El sistema de gestión de consultas de la UTN permite a una red de comunicación entre alumnos, docentes y administrativos de la Universidad Tecnológica Nacional de Rosario, permitiendo controlar y gestionar la toma de clases de consultas. Nuestro propósito es que los estudiantes puedan encontrar respuestas a las inquietudes y necesidades académicas de una manera rápida y sencilla.</p>
-                @if(!Auth::check())
-                <a href="{{route('login')}}" class="btn btn-primary">Acceder</a>
-                @endif
             </div>
 
             <div class="col-sm">
