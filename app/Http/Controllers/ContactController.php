@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\contactMail;
+use App\Mail\ContactMail;
 use App\Models\User;
 use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ class ContactController extends Controller
         $message = $request->message;
         
         $data = ['name'=>$name, 'message'=> $message, 'email'=>$email ];
-        Mail::to('juanperez@gmail.com')->send(new contactMail($data));
+        Mail::to('juanperez@gmail.com')->send(new ContactMail($data));
         return redirect()->back()->with('success_message','Mail enviado correctamente');
     }
 

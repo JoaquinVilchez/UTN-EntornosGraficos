@@ -9,10 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\MeetingsExport;
 use App\Imports\MeetingsImport;
+use App\Mail\CanceledMeetingNotification;
 use App\Models\CanceledMeetings;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
@@ -235,6 +237,25 @@ class MeetingController extends Controller
                         'reason' => $reason,
                         'meeting_id' => $meeting->id
                     ]);
+
+
+                    //Envio de mail a los alumnos inscriptos
+                    $inscriptions = $meeting->insriptions;
+                    foreach ($inscriptions as $inscription)
+                    {
+                        $student = $inscription->student;
+                        
+                        $data = [
+                            'student_name', $student->name, 
+                            'teacher_name'=> $meeting->teacher, 
+                            'reason'=> $reason, 
+                            'alternative_datetime', $alternative_datetime
+                        ];
+
+                        Mail::to($student->email)->send(new CanceledMeetingNotification($data));
+                    }
+
+                    
 
                     return redirect()->route('meetings.my_meetings')->with('success_message', "Se canceló la consulta del {$datetime} y se registró la consulta alternativa con su motivo de cancelación de manera satisfactoria."); 
 

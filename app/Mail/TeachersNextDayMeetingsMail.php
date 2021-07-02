@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Markdown;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMail extends Mailable
+class TeachersNextDayMeetingsMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
@@ -30,6 +30,6 @@ class ContactMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.contact')->subject("Nuevo mensaje de la app consultas")->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'));
+        return $this->markdown('emails.teachers_next_day_meetings')->subject("Tus consultas programadas para el día de mañana")->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'));
     }
 }
