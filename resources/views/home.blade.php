@@ -22,7 +22,7 @@
                             </div>
                             @if(Auth::check())    
                                 <div class="d-flex align-items-center m-4">
-                                    <a href="{{route('user.edit', Auth::user()->id)}}" class="btn btn-primary">Editar Perfil</a>
+                                    <a href="{{route('user.my_user', Auth::user()->id)}}" class="btn btn-primary">Editar Perfil</a>
                                 </div>
                             @endif
                             </div>

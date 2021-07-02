@@ -107,6 +107,10 @@
 
                             @endif
 
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('users.search_teacher')}}">Docentes</a>
+                            </li>
+
                         @endif
 
                     </ul>
@@ -134,7 +138,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     
-                                    <a class="dropdown-item" href="{{ route('user.edit', Auth::user()->id) }}">
+                                    <a class="dropdown-item" href="{{ route('user.my_user', Auth::user()->id) }}">
                                      Mis datos
                                     </a>
                                     

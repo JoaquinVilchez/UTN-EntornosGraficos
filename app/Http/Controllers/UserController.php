@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -104,6 +106,18 @@ class UserController extends Controller
         return view('users.edit')->with('user', $user);
     }
 
+    public function my_user()
+    {
+
+    if (Auth::check()){
+       $user=Auth::user();
+       return view('users.my_user')->with('user', $user);
+       }
+       else return view('home');
+
+       
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -111,6 +125,30 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function my_user_update(Request $request)
+    {
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'dni' => ['required', 'string', 'size:8'],
+            'university_id' => ['required', 'string', 'max:6']
+            
+        ]);
+       
+        $user = Auth::user();
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'dni' => $request->dni,
+            'university_id' => $request->university_id
+            
+        ]);
+
+        return redirect()->route('user.index')->with('success_message', 'Usuario editado con éxito');
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -121,7 +159,7 @@ class UserController extends Controller
             'university_id' => ['required', 'string', 'max:6'],
             'type' => 'required'
         ]);
-
+       
         $user = User::find($id);
         $user->update([
             'first_name' => $request->first_name,
