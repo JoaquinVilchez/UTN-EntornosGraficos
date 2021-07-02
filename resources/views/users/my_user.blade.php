@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-12"> 
                 <h1>Editar usuario</h1>
-                <form method="POST" action="{{ route('user.update', $user->id) }}">
+                <form method="POST" action="{{ route('user.my_user_update', $user->id) }}">
                     @csrf
                     @method('PUT')
 
@@ -60,32 +60,6 @@
                     </div>
 
                     
-                   
-
-                        <div class="form-group row">
-                            <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de usuario') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="form-control" name="type" id="type">
-                                    <option value="student" 
-                                    @if ($user->type=='student')
-                                        selected
-                                    @endif >Alumno</option>
-                                    <option value="teacher"
-                                    @if ($user->type=='teacher')
-                                        selected
-                                    @endif 
-                                    >Docente</option>
-                                    <option value="admin"
-                                    @if ($user->type=='admin')
-                                        selected
-                                    @endif 
-                                    >Administrador</option>
-                                </select>
-
-                                {!!$errors->first('type', '<small style="color:red"><i class="fas fa-exclamation-circle"></i> :message</small>') !!}
-                            </div>
-                        </div>
 
                     <div class="form-group row mb-0">
                         <div class="col-md-6 offset-md-4">
