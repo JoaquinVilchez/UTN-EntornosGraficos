@@ -17,11 +17,12 @@ class SubjectUserSeeder extends Seeder
     public function run()
     {
 
-        $users= User::all();
+        $users = User::all();
 
         $subjects = Subject::all();
         $roles = ['titular', 'alternate'];
-        $conditions = ['not_enrolled','enrolled', 'regular', 'approved']; 
+        $conditions = ['not_enrolled', 'enrolled', 'regular', 'approved'];
+        $condition = null;
 
         for ($i = 0; $i < count($subjects); $i++) {
 
@@ -29,22 +30,20 @@ class SubjectUserSeeder extends Seeder
             $subject = $subjects->random(1)->first();
             $role = null;
 
-            
-            if($user->type == 'teacher'){
+
+            if ($user->type == 'teacher') {
 
                 $role = $roles[rand(0, 1)];
                 $condition = null;
-            }
-            else if($user->type == 'student'){
-                $condition = $conditions[rand(0,3)];   
-                
+            } else if ($user->type == 'student') {
+                $condition = $conditions[rand(0, 3)];
             }
 
             DB::table('subject_user')->insert([
                 'user_id' => $user->id,
                 'subject_id' => $subject->id,
                 'role' => $role,
-                'status' =>$condition,
+                'status' => $condition,
             ]);
         }
     }
