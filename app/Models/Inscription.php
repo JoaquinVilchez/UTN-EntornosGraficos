@@ -23,13 +23,13 @@ class Inscription extends Model
 
     public function getState()
     {
-        $state = $this->state;
+        $status = $this->status;
 
-        if($state == 'active'){
+        if($status == 'active'){
             return 'Activo';
         }
         
-        if($state == 'canceled'){
+        if($status == 'canceled'){
             return 'Cancelado';
         }        
 

@@ -15,6 +15,7 @@ class UserController extends Controller
     {
         $subject = Subject::find($request->subjectId);
         $teachers = $subject->teachers();
+
         return $teachers;
     }
 

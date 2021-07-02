@@ -8,7 +8,7 @@
                 <form method="POST" action="{{ route('meetings.store')}}">
                     @csrf
                     <div class="form-group row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
 
                             <label for="subjects" class="col-form-label">Materia</label>
                             <select id="subjects" onchange="selectTeachers()" data-live-search="true" class="border selectpicker" name="subject" value="{{ old('subject') }}" required>
@@ -25,17 +25,9 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="col-md-6">
-                            <label for="teachers" class="col-form-label">Profesor</label>
-                            <select id="teachers" data-live-search="true" class="border form-control" name="teacher" value="{{ old('teacher') }}" required>
-                            </select>
 
-                            @error('teacher')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                        <input type="hidden" id="teachers" name="teacher" value="{{Auth::user()->id}}">
+
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6">
@@ -131,32 +123,6 @@
             time: true,
             timePattern: ['h', 'm']
         });
-
-        function selectTeachers(){
-            const subjectId = $('#subjects').val();
-            const selectTeachers = $("#teachers");
-            selectTeachers.find('option').remove();
-            $.ajax({
-                url : "{{route('user.getTeachersFromSubject')}}",
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data:{subjectId:subjectId},
-                success:function(data){
-                    let option;
-                    console.log(data)
-                    data.forEach(teacher => {
-                        console.log(teacher)
-                        option = `<option value="${teacher.id}">${teacher.first_name} ${teacher.last_name}</option>`;
-                        selectTeachers.append(option);
-                    });
-                },
-                error:function(data){
-                    console.log(data)
-                }
-            });
-        }
 
         function disableInputs(){
             let typeValue = $('#type').val();

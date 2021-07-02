@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,7 +41,8 @@ class Meeting extends Model
             return '<span class="badge badge-danger">Cancelado</span>';
         }
 
-        if ($state == 'active') {
+        if ($state == 'active') 
+        {
             return '<span class="badge badge-success">Activo</span>';
         }
     }
@@ -73,4 +76,98 @@ class Meeting extends Model
         $weekDays = getSpanishWeekDays();
         return $weekDays[$this->day] . ' - ' . $this->hour;
     }
+
+
+    public function next_meetings($cant)
+    {
+
+        $dates = new Collection();
+        $dayName = getDayName($this->day);   
+        $date = Carbon::now()->next($dayName)->setTimeFromTimeString($this->hour);
+        
+        for($i=1; $i<=$cant; $i++){
+
+            $dates->push($date->copy());          
+            $date->addWeek(1);
+        } 
+
+        return $dates;
+
+    }
+
+
+    public function previous_meetings($cant)
+    {
+
+        $dates = new Collection();
+        $dayName = getDayName($this->day);   
+        $date = Carbon::now()->previous($dayName)->setTimeFromTimeString($this->hour);
+        
+        for($i=1; $i<=$cant; $i++){
+
+            $dates->push($date->copy());          
+            $date->subWeek(1);
+        } 
+
+        return $dates;
+
+    }
+
+
+    public function isActiveForDate($date)
+    {
+        $canceledMeetings = CanceledMeetings::all()->where('meeting_id', $this->id)->where('datetime', $date->format('Y-m-d H:i:s'));
+
+        if(! $canceledMeetings->first()) //not canceled meeting
+        {
+            return true;   
+        }   
+
+        else return false;
+
+
+    }
+
+
+    public function getStatusForDate($date)
+    {
+        $now = new Carbon();
+        
+        if($this->isActiveForDate($date))
+        {
+            if($date<$now)
+            {
+                return 'Finalizado';
+            }
+            else
+            {
+                return 'Activo';
+            }
+        }
+
+        else
+        {
+            return 'Cancelado';
+        }
+        
+
+    }
+
+    public function get_canceled_meeting_for_date($datetime)
+    {
+
+        
+        $canceledMeetings = $this->canceledMeetings;
+        $canceledMeeting = $canceledMeetings->where('datetime', $datetime)->first();
+
+        if($canceledMeeting->first())
+        {
+            return $canceledMeeting;
+        }
+
+        else return false;
+
+    }
+
+
 }

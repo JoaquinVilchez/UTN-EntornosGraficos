@@ -82,7 +82,7 @@ class InscriptionController extends Controller
         {
             $output .= '<div class="custom-control custom-radio">
             <input type="radio" id="'.$date.'" value="'.$date.'" name="datetime"  class="custom-control-input">
-            <label class="custom-control-label" for="'.$date.'">'.$date.'</label>
+            <label class="custom-control-label" for="'.$date.'">'.$date->format('Y-m-d H:i').'</label>
             </div>';
         }
 
@@ -134,14 +134,14 @@ class InscriptionController extends Controller
 
             }
             else{
-                return redirect()->route('inscriptions_user.create')->with('error_message', 'No se ha podido encontrar la consulta seleccionada.');
+                return redirect()->route('inscriptions_user.list')->with('error_message', 'No se ha podido encontrar la consulta seleccionada.');
             }
 
 
 
         }catch(Exception $th){
 
-            return redirect()->route('inscriptions_user.create')->with('error_message', 'Ha habido un error y no se ha podido incribirse a la consulta.');                
+            return redirect()->route('inscriptions_user.list')->with('error_message', 'Ha habido un error y no se ha podido incribirse a la consulta.');                
         }
 
     }
@@ -183,11 +183,13 @@ class InscriptionController extends Controller
         $orderDescending = false;
 
         if ($request->orderbyDate != null) {
-            
+
             if($request->orderbyDate == 'DESC'){
                 $orderDescending = true;
 
-            } 
+            }
+
+            
         
         }
 
@@ -199,15 +201,14 @@ class InscriptionController extends Controller
 
             $today = new Carbon();
 
-
             $next_inscriptions = Inscription::all()
                 ->where('datetime', '>=', $today)
-                ->sortBy('datetime', SORT_REGULAR, $orderDescending)
+                ->sortBy('datetime', 0, $orderDescending)
                 ->unique();
 
             $previous_inscriptions = Inscription::all()
                 ->where('datetime', '<', $today)
-                ->sortBy('datetime', SORT_REGULAR, $orderDescending)
+                ->sortBy('datetime', 0, $orderDescending)
                 ->unique();
 
             return  view('inscriptions_user.list')->with('next_inscriptions', $next_inscriptions)->with('previous_inscriptions', $previous_inscriptions)->with('user', $user);
