@@ -9,7 +9,7 @@
                         <div class="card-body text-white rounded">
                             <div class="row ">
                                 <div class=" ml-4">
-                                    <img src="http://www.radiouniversidad.com.ar/wp-content/uploads/2015/01/logo-utn1.jpg" alt="utn-picture" class="img-thumbnail" style="height: 100px;">
+                                    <img src="https://3dsur.com.ar/wp-content/uploads/2018/08/utn-logo.jpg" alt="utn-picture" class="img-thumbnail" style="height: 100px;">
                                 </div>
                                 <div class="ml-4">
                                     <h1 class="card-title">¿Quiénes Somos?</h1>

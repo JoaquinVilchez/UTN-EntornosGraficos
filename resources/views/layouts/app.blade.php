@@ -174,7 +174,7 @@
                                 <a class="mr-3 text-light" href="{{ route('contact.index') }}">Contacto</a>
                             </li>
                             <li>
-                                <a class="mr-3 text-light" href="#">Mapa del sitio</a>
+                                <a class="mr-3 text-light" href="{{ route('contact.sitemap') }}">Mapa del sitio</a>
                             </li>
                         </ul>
                     </div>
