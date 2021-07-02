@@ -6,11 +6,12 @@
           @include('elements.messages')
             <div class="col-12">
                 <div class="container">
-                    <div class="row">
+                    <div class="row d-flex justify-content-between">
+                        <h1>Materias</h1>
                         <div class="ml-auto"><a href="{{route('subject.create')}}" type="button" class="btn btn-primary">Nueva materia</a></div>
                     </div>
                 </div>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -26,11 +27,13 @@
                             <td>{{$subject->id}}</td>
                             <td>{{$subject->name}}</td>
                             <td>{{$subject->level}}</td>
-                            <td>{{$subject->career}}</td>         
+                            <td>{{$subject->career}}</td>
                             <td>
 
-                             <a href="{{route('subject.edit', $subject->id)}}">Editar</a>
-                                <a href="#" data-toggle="modal" data-target="#deleteModal" data-subjectid="{{$subject->id}}">Eliminar</a>
+                              <a class="btn btn-info" href="{{route('subjects_user.view_subjects_info', $subject->id)}}">Ver info</a>
+                              <a class="btn btn-warning" href="{{route('subject.edit', $subject->id)}}">Editar</a>
+                              <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal" data-subjectid="{{$subject->id}}">Eliminar</a>
+                              
                             </td>
                         </tr>
                     @endforeach

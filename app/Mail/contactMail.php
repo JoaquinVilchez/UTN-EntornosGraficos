@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Markdown;
 use Illuminate\Queue\SerializesModels;
 
-class contactMail extends Mailable
+class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;

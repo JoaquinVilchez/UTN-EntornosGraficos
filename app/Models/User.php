@@ -42,9 +42,9 @@ class User extends Authenticatable
         return $this->HasMany(Inscription::class);
     }
 
-    public function meeting()
+    public function meetings()
     {
-        return $this->hasMany(Meeting::class);
+        return $this->HasMany(Meeting::class, 'teacher_id');
     }
 
     public function subjects()
@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function getFullName()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return strtoupper($this->last_name) . ', ' . $this->first_name;
     }
 
     public function getType()
@@ -72,22 +72,19 @@ class User extends Authenticatable
     {
 
         $subject = $this->subjects->where('id', $subject_id);
-        
+
         $role = $subject->first()->pivot->role;
-        
-        return $role;            
-        
+
+        return $role;
     }
 
 
-    public function getRoleSpanish($id){
-        
-        if($this->getRole($id) == 'titular'){
-            $rol = 'Titular';
-            
-        }
+    public function getRoleSpanish($id)
+    {
 
-        elseif($this->getRole($id) == 'alternate'){
+        if ($this->getRole($id) == 'titular') {
+            $rol = 'Titular';
+        } elseif ($this->getRole($id) == 'alternate') {
             $rol = 'Suplente';
         }
 
@@ -99,38 +96,29 @@ class User extends Authenticatable
     {
 
         $subject = $this->subjects->where('id', $subject_id);
-        
+
         $status = $subject->first()->pivot->status;
-        
-        return $status;            
-        
-    }
-
-
-    public function getStatusofSubjectSpanish($id){
-        
-
-        $status = null;
-
-        if($this->getStatusofSubject($id) == 'approved'){
-            $status = 'Aprobado';
-        }
-
-        elseif($this->getStatusofSubject($id) == 'regular'){
-            $status = 'Regular';
-        }
-
-        elseif($this->getStatusofSubject($id) == 'enrolled'){
-            $status = 'Inscripto';
-        }
-
-        elseif($this->getStatusofSubject($id) == 'not_enrolled'){
-            $status = 'No incripto';
-        }
 
         return $status;
     }
 
 
+    public function getStatusofSubjectSpanish($id)
+    {
 
+
+        $status = null;
+
+        if ($this->getStatusofSubject($id) == 'approved') {
+            $status = 'Aprobado';
+        } elseif ($this->getStatusofSubject($id) == 'regular') {
+            $status = 'Regular';
+        } elseif ($this->getStatusofSubject($id) == 'enrolled') {
+            $status = 'Inscripto';
+        } elseif ($this->getStatusofSubject($id) == 'not_enrolled') {
+            $status = 'No incripto';
+        }
+
+        return $status;
+    }
 }

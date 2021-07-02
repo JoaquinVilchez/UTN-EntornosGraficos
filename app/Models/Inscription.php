@@ -20,4 +20,19 @@ class Inscription extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getState()
+    {
+        $status = $this->status;
+
+        if($status == 'active'){
+            return 'Activo';
+        }
+        
+        if($status == 'canceled'){
+            return 'Cancelado';
+        }        
+
+    }
+
 }

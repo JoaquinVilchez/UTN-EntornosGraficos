@@ -15,7 +15,8 @@ class CreateInscriptionsTable extends Migration
     {
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->id();
-            $table->string('state')->default('active'); //active, assisted, cancelled
+            $table->datetime('datetime');
+            $table->string('status')->default('active'); //active, assisted, cancelled
             $table->integer('rating_review')->nullable();
             $table->longText('message_review')->nullable();
             $table->unsignedBigInteger('student_id');
