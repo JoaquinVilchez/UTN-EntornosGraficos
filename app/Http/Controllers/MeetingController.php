@@ -30,6 +30,14 @@ class MeetingController extends Controller
         return view('meetings.create')->with('subjects', $subjects);
     }
 
+
+    public function create_for_teacher()
+    {
+        $user = Auth::user();
+        $subjects = $user->subjects;
+        return view('meetings.create_for_teacher')->with('subjects', $subjects);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

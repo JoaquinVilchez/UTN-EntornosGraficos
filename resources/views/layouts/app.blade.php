@@ -54,8 +54,60 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
+                    
                     <ul class="navbar-nav mr-auto">
+                        
+                        @if (Auth::check())
+
+                            <!-- Student view-->
+                            @if(Auth::user()->type == 'student')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('subjects_user.index', Auth::user()->id)}}">Mis materias</a>
+                                </li>
+        
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('inscriptions_user.list')}}">Mis consultas</a>
+                                </li>
+                                
+                            @endif
+
+
+                            <!-- Teacher view-->
+                            @if(Auth::user()->type == 'teacher')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('subjects_user.index', Auth::user()->id)}}">Mis materias</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('meetings.my_meetings')}}">Mis consultas</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('meetings.create_for_teacher')}}">Crear consulta</a>
+                            </li>
+    
+                            @endif
+
+                            @if(Auth::user()->type == 'admin')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('user.index')}}">Usuarios</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('subject.index')}}">Materias</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('meetings.list')}}">Consultas</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('meetings.create')}}">Crear consulta</a>
+                                </li>
+
+                            @endif
+
+                        @endif
 
                     </ul>
 
@@ -81,15 +133,21 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    
+                                    <a class="dropdown-item" href="{{ route('user.edit', Auth::user()->id) }}">
+                                     Mis datos
+                                    </a>
+                                    
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        Cerrar sesión
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+                                    
                                 </div>
                             </li>
                         @endguest
@@ -110,13 +168,13 @@
                 
                         <ul class="list-unstyled d-flex justify-content-start">
                             <li>
-                                <a class="mr-3"  href="{{ route('contact.about_us') }}">¿Quienes somos?</a>
+                                <a class="mr-3 text-light"  href="{{ route('contact.about_us') }}">¿Quienes somos?</a>
                             </li>
                             <li>
-                                <a class="mr-3" href="{{ route('contact.index') }}">Contacto</a>
+                                <a class="mr-3 text-light" href="{{ route('contact.index') }}">Contacto</a>
                             </li>
                             <li>
-                                <a class="mr-3" href="#">Mapa del sitio</a>
+                                <a class="mr-3 text-light" href="#">Mapa del sitio</a>
                             </li>
                         </ul>
                     </div>

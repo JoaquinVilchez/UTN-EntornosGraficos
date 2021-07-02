@@ -78,6 +78,7 @@ Route::post('/inscripciones/nueva/', [InscriptionController::class, 'store'])->n
 //Consultas
 Route::get('/consultas', [MeetingController::class, 'list'])->name('meetings.list');
 Route::get('/consultas/nuevo', [MeetingController::class, 'create'])->name('meetings.create');
+Route::get('/mis-consultas/nuevo/', [MeetingController::class, 'create_for_teacher'])->name('meetings.create_for_teacher');
 Route::post('/consultas/nuevo', [MeetingController::class, 'store'])->name('meetings.store');
 Route::get('/consultas/editar/{id}', [MeetingController::class, 'edit'])->name('meetings.edit');
 Route::put('/consultas/editar/{id}', [MeetingController::class, 'update'])->name('meetings.update');
