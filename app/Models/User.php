@@ -121,4 +121,13 @@ class User extends Authenticatable
 
         return $status;
     }
+
+    public function getUnreadNotification($id) {
+        $user = User::find($id);
+
+        foreach ($user->unreadNotifications as $notification) {
+            echo $notification->type;
+            $notification->markAsRead();
+        }
+    }
 }

@@ -78,5 +78,13 @@
         var modal = $(this)
         modal.find('.modal-body #userid').val(userid)
       });
+
+
+        $( document ).ready(function() {
+        $('.leftmenutrigger').on('click', function(e) {
+        $('.side-nav').toggleClass("open");
+        e.preventDefault();
+    });
+    });
     </script>
 @endsection

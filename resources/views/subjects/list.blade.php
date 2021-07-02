@@ -81,5 +81,12 @@
         var modal = $(this)
         modal.find('.modal-body #subjectid').val(subjectid)
       });
+
+      $( document ).ready(function() {
+        $('.leftmenutrigger').on('click', function(e) {
+        $('.side-nav').toggleClass("open");
+        e.preventDefault();
+    });
+    });
     </script>
 @endsection
