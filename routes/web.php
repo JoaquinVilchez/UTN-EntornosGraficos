@@ -79,7 +79,7 @@ Route::group(['middleware' => 'admin'], function () {
 // Materias Usuario
 
 Route::get('/materias-usuario/{id_user}', [SubjectUserController::class, 'index'])->name('subjects_user.index'); //materias que da un docente
-Route::group(['middleware' => 'admin-docente'], function () {
+Route::group(['middleware' => 'is-correct-user'], function () {
     Route::get('/materias-usuario/editar/{id_user}', [SubjectUserController::class, 'edit'])->name('subjects_user.edit');
     Route::post('/materias-usuario/editar/{id_user}', [SubjectUserController::class, 'update'])->name('subjects_user.update');
     Route::get('/materias-usuario/editar/{id_user}/roles', [SubjectUserController::class, 'view_roles_and_status'])->name('subjects_user.view_roles_and_status');
