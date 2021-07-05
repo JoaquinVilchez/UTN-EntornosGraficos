@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use PhpParser\Node\Stmt\TryCatch;
+use Auth;
 
 class SubjectUserController extends Controller
 {
@@ -183,7 +184,6 @@ class SubjectUserController extends Controller
     public function view_roles_and_status(Request $request, $id)
     {
 
-
         /*Si no hay materias marcadas en el checkbox, se eliminan las materias directamente, evitando el update */
         if ($request->input('subjects') == null) {
 
@@ -197,6 +197,7 @@ class SubjectUserController extends Controller
         } else {
 
             $user = User::find($id);
+
             $checked_subjects = array();
             $checked_subjects_id = array_keys($request->input('subjects'));
 
@@ -205,9 +206,6 @@ class SubjectUserController extends Controller
             $checked_subjects = $subjects->intersect(Subject::whereIn('subjects.id', $checked_subjects_id)->get());
             $add_subjects = $checked_subjects->diff($old_subjects)->unique();
             $edit_subjects = $old_subjects->intersect($checked_subjects)->unique();
-
-
-
 
             $delete_subjects = $old_subjects->diff($checked_subjects)->unique();
 
@@ -219,12 +217,9 @@ class SubjectUserController extends Controller
             $request->session()->put('add_subjects', $add_subjects);
             $request->session()->put('edit_subjects', $edit_subjects);
 
-
-
             if ($user->type == 'teacher') {
                 return view('subjects_user.view_roles')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects', $edit_subjects)->with('user', $user);
-            }
-            if ($user->type == 'student') {
+            } else if ($user->type == 'student') {
                 return view('subjects_user.view_status')->with('add_subjects', $add_subjects)->with('delete_subjects', $delete_subjects)->with('edit_subjects', $edit_subjects)->with('user', $user);
             }
         }
