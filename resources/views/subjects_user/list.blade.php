@@ -5,15 +5,18 @@
       <div class="row">
           @include('elements.messages')
             <div class="col-12">
-              <div class="d-flex justify-content-between mb-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
                 <h1>Materias para el {{strtolower($user->getType())}} {{$user->getFullName()}}</h1>
-                <a href="{{ route('subjects_user.edit', $user->id) }}">Ir a editar</a>
+                @if (Auth::user()->id == $user->id || Auth::user()->type == 'admin')
+                <a class="btn btn-primary" href="{{ route('subjects_user.edit', $user->id) }}">Editar</a>
+                
+                @endif
               </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-hover table-responsive-md">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Nombre</th>
+                        <th scope="col">Materia</th>
                         <th scope="col">Carrera</th>
                         <th scope="col">Nivel</th>
                         @if($user->type=='teacher')
