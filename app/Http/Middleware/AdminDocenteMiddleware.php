@@ -16,9 +16,8 @@ class AdminDocenteMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && (auth()->user()->type=='admin' || auth()->user()->type =='teacher'))
-        return $next($request);
+        if (auth()->check() && (auth()->user()->type == 'admin' || auth()->user()->type == 'teacher'))
+            return $next($request);
         return redirect()->route('home');
-       
     }
 }
