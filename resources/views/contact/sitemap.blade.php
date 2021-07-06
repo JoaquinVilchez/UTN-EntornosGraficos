@@ -23,7 +23,7 @@
                     @if(Auth::user()->type == 'student')
                         <h3>Sitios Estudiante</h3>
                         <ul>
-                            <li><a href={{route('subjects_user.index', Auth::user()->id)}}>Mis Datos</a></li>
+                            <li><a href={{route('user.my_user', Auth::user()->id)}}>Mis Datos</a></li>
                             <li><a href={{route('subjects_user.index', Auth::user()->id)}}>Mis Materias</a></li>
                             <li><a href={{route('inscriptions_user.list')}}>Mis Consultas</a></li>
                             <li><a href={{route('inscriptions_user.create')}}>Nueva Inscripción a Consulta</a></li>
