@@ -68,10 +68,6 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('/materias/nuevo', [SubjectController::class, 'store'])->name('subject.store');
 });
 
-
-
-
-
 Route::group(['middleware' => 'admin'], function () {
     Route::get('/datos-materia/{id}',  [SubjectUserController::class, 'view_subjects_info'])->name('subjects_user.view_subjects_info');
 });
@@ -122,4 +118,6 @@ Route::get('sitemap', function () {
     SitemapGenerator::create('http://entornosgraficos2021.tk/')->writeToFile('sitemap.xml');
     return 'sitemap created';
 });
+
 Route::view('/mapa', 'contact.sitemap')->name('contact.sitemap');
+

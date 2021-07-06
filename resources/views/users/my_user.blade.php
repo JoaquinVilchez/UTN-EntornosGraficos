@@ -4,7 +4,9 @@
     <div class="container">
         <div class="row">
             <div class="col-12"> 
-                <h1>Editar usuario</h1>
+                <div class="row d-flex align-items-center justify-content-between border-bottom pb-2 mb-4">
+                    <h1>Mis datos</h1>
+                </div>
                 <form method="POST" action="{{ route('user.my_user_update', $user->id) }}">
                     @csrf
                     @method('PUT')
