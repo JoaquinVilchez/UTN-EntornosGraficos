@@ -37,9 +37,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function inscription()
+    public function inscriptions()
     {
-        return $this->HasMany(Inscription::class);
+        return $this->HasMany(Inscription::class, 'student_id');
     }
 
     public function meetings()
