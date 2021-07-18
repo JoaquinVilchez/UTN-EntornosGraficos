@@ -185,6 +185,7 @@
                 </div>
             </div>
         </footer>
+    </div>
     @yield('js-script')
 </body>
 </html>
