@@ -108,8 +108,6 @@ abbr[data-original-title] {
     text-decoration: underline dotted;
     cursor: help;
     border-bottom: 0;
-    -webkit-text-decoration-skip-ink: none;
-    text-decoration-skip-ink: none;
 }
 
 address {
@@ -4868,9 +4866,6 @@ input[type="button"].btn-block {
     }
 }
 
-.accordion {
-    overflow-anchor: none;
-}
 .accordion > .card {
     overflow: hidden;
 }
