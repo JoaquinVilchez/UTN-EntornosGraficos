@@ -256,7 +256,7 @@ class SubjectUserController extends Controller
     public function search_teacher(Request $request)
     {
         $name = $request->get('name');
-        $users = User::orderBy('id')->where('type', 'teacher')->where('type', 'teacher')->where('status', 'active')->where('first_name', 'LIKE', "%$name%")->paginate(20);
+        $users = User::orderBy('id')->where('type', 'teacher')->where('type', 'teacher')->where('status', 'active')->where('first_name', 'LIKE', "%$name%")->orwhere('last_name', 'LIKE', "%$name%")->paginate(20);
         return view('users.search_teacher')->with('users', $users);
     }
 }
