@@ -208,8 +208,10 @@ class MeetingController extends Controller
         try{
 
 
+
             $user = Auth::user();
             $meeting = Meeting::find($request->meetingid);
+
             $reason = $request->reason;
             $alternative_date = $request->alternative_date;
             $alternative_hour = $request->alternative_hour;
@@ -239,22 +241,33 @@ class MeetingController extends Controller
                     ]);
 
 
-                    //Envio de mail a los alumnos inscriptos
-                    $inscriptions = $meeting->insriptions;
-                    foreach ($inscriptions as $inscription)
+                    if(count($meeting->inscriptions) > 0)
                     {
-                        $student = $inscription->student;
-                        
-                        $data = [
-                            'student_name', $student->name, 
-                            'teacher_name'=> $meeting->teacher, 
-                            'reason'=> $reason, 
-                            'alternative_datetime', $alternative_datetime
-                        ];
 
-                        Mail::to($student->email)->send(new CanceledMeetingNotification($data));
+                        //Envio de mail a los alumnos inscriptos
+                        $inscriptions = $meeting->inscriptions->where('datetime', $request->datetime);
+
+                        foreach ($inscriptions as $inscription)
+                        {
+
+                            $student = $inscription->student;
+
+
+                            $data = [
+                                'student_name'=> $student->getFullName(), 
+                                'teacher_name'=> $meeting->teacher->getFullName(), 
+                                'reason'=> $reason, 
+                                'alternative_datetime'=> $alternative_datetime->format('Y-m-d H:i')
+                            ];
+
+                            Mail::to($student->email)->send(new CanceledMeetingNotification($data));
+
+
+                        }
+
+
                     }
-
+                   
                     
 
                     return redirect()->route('meetings.my_meetings')->with('success_message', "Se canceló la consulta del {$datetime} y se registró la consulta alternativa con su motivo de cancelación de manera satisfactoria."); 
