@@ -201,15 +201,17 @@ class InscriptionController extends Controller
 
             $today = new Carbon();
 
-            $next_inscriptions = Inscription::all()
+           
+            $next_inscriptions = $user->inscriptions
                 ->where('datetime', '>=', $today)
                 ->sortBy('datetime', 0, $orderDescending)
                 ->unique();
 
-            $previous_inscriptions = Inscription::all()
+            $previous_inscriptions = $user->inscriptions
                 ->where('datetime', '<', $today)
                 ->sortBy('datetime', 0, $orderDescending)
                 ->unique();
+
 
             return  view('inscriptions_user.list')->with('next_inscriptions', $next_inscriptions)->with('previous_inscriptions', $previous_inscriptions)->with('user', $user);
         }
