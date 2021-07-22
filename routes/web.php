@@ -82,7 +82,7 @@ Route::get('/materias-usuario/{id_user}', [SubjectUserController::class, 'index'
 Route::group(['middleware' => 'is-correct-user'], function () {
     Route::get('/materias-usuario/editar/{id_user}', [SubjectUserController::class, 'edit'])->name('subjects_user.edit');
     Route::post('/materias-usuario/editar/{id_user}', [SubjectUserController::class, 'update'])->name('subjects_user.update');
-    Route::get('/materias-usuario/editar/{id_user}/roles', [SubjectUserController::class, ' '])->name('subjects_user.view_roles_and_status');
+    Route::get('/materias-usuario/editar/{id_user}/roles', [SubjectUserController::class, 'view_roles_and_status'])->name('subjects_user.view_roles_and_status');
     Route::post('/materias-usuario/eliminar/', [SubjectUserController::class, 'destroy'])->name('subjects_user.destroy');
 });
 
