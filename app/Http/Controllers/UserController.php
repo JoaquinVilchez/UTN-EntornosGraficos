@@ -109,13 +109,10 @@ class UserController extends Controller
     public function my_user()
     {
 
-    if (Auth::check()){
-       $user=Auth::user();
-       return view('users.my_user')->with('user', $user);
-       }
-       else return view('home');
-
-       
+        if (Auth::check()) {
+            $user = Auth::user();
+            return view('users.my_user')->with('user', $user);
+        } else return view('home');
     }
 
     /**
@@ -133,9 +130,9 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'dni' => ['required', 'string', 'size:8'],
             'university_id' => ['required', 'string', 'max:6']
-            
+
         ]);
-       
+
         $user = Auth::user();
         $user->update([
             'first_name' => $request->first_name,
@@ -143,7 +140,7 @@ class UserController extends Controller
             'email' => $request->email,
             'dni' => $request->dni,
             'university_id' => $request->university_id
-            
+
         ]);
 
         return redirect()->route('user.index')->with('success_message', 'Usuario editado con éxito');
@@ -159,7 +156,7 @@ class UserController extends Controller
             'university_id' => ['required', 'string', 'max:6'],
             'type' => 'required'
         ]);
-       
+
         $user = User::find($id);
         $user->update([
             'first_name' => $request->first_name,

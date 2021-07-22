@@ -31,19 +31,18 @@ class ContactController extends Controller
      */
     public function send(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             "message" => "required|string|min:20|max:2000",
             "name" => "required|string|min:3",
             "email" => "required|string|min:3",
         ]);
-        
+
         $name = $request->name;
         $email = $request->email;
         $message = $request->message;
-        
-        $data = ['name'=>$name, 'message'=> $message, 'email'=>$email ];
-        Mail::to('juanperez@gmail.com')->send(new ContactMail($data));
-        return redirect()->back()->with('success_message','Mail enviado correctamente');
-    }
 
+        $data = ['name' => $name, 'message' => $message, 'email' => $email];
+        Mail::to(env('MAIL_FROM_ADDRESS'))->send(new ContactMail($data));
+        return redirect()->back()->with('success_message', 'Mail enviado correctamente');
+    }
 }

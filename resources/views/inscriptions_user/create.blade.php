@@ -92,15 +92,15 @@
           },
           data:{subjectId:subjectId},
           success:function(data){
+            const dataArray = Object.values(data);
             let option;
             option = `<option>Seleccione una opción</option>`;
             selectTeachers.append(option);
-            data.forEach(teacher => {
+            dataArray.forEach(teacher => {
               option = `<option value="${teacher.id}">${teacher.first_name} ${teacher.last_name}</option>`;
-
               selectTeachers.append(option);
             });
-          }, 
+          },
           error:function(data){
             console.log(data)
           }
@@ -121,10 +121,9 @@
           },
           data:{teacherId:teacherId, subjectId:subjectId},
           success:function(data){
+            console.log(data)
             $('#meetings').html(data);
-
-            
-          }, 
+          },
           error:function(data){
             console.log(data)
           }
