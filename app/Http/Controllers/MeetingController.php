@@ -179,7 +179,7 @@ class MeetingController extends Controller
             $user = Auth::user();
 
             if ($user->type == 'teacher') {
-                
+
                 $next_meetings = $user->meetings;
                 return view('meetings.my_meetings')->with('user', $user)->with('next_meetings', $next_meetings);
             } else {
@@ -205,7 +205,7 @@ class MeetingController extends Controller
     public function cancel(Request $request)
     {
 
-        try{
+        try {
 
 
             $user = Auth::user();
@@ -213,27 +213,25 @@ class MeetingController extends Controller
             $reason = $request->reason;
             $alternative_date = $request->alternative_date;
             $alternative_hour = $request->alternative_hour;
-            
+
             $alternative_datetime = new Carbon("{$alternative_date} {$alternative_hour}");
-            
+
             //valido que exista una fecha valida para la meeting mencionada
             $datetime = new Carbon($request->datetime);
             $day = $datetime->dayOfWeek;
             $hour = $datetime->format('H:i');
-    
+
             $meeting_day = $meeting->day;
             $meeting_hour = $meeting->hour;
 
             $now = new Carbon();
 
-            if(($meeting_day == $day) && ($meeting_hour==$hour))
-            {
+            if (($meeting_day == $day) && ($meeting_hour == $hour)) {
 
-                if($alternative_datetime > $now)
-                {
+                if ($alternative_datetime > $now) {
                     CanceledMeetings::create([
-                        'datetime'=> $datetime,
-                        'alternative_datetime'=>$alternative_datetime,
+                        'datetime' => $datetime,
+                        'alternative_datetime' => $alternative_datetime,
                         'reason' => $reason,
                         'meeting_id' => $meeting->id
                     ]);
@@ -241,42 +239,29 @@ class MeetingController extends Controller
 
                     //Envio de mail a los alumnos inscriptos
                     $inscriptions = $meeting->insriptions;
-                    foreach ($inscriptions as $inscription)
-                    {
+                    foreach ($inscriptions as $inscription) {
                         $student = $inscription->student;
-                        
+
                         $data = [
-                            'student_name', $student->name, 
-                            'teacher_name'=> $meeting->teacher, 
-                            'reason'=> $reason, 
+                            'student_name', $student->name,
+                            'teacher_name' => $meeting->teacher,
+                            'reason' => $reason,
                             'alternative_datetime', $alternative_datetime
                         ];
 
                         Mail::to($student->email)->send(new CanceledMeetingNotification($data));
                     }
 
-                    
 
-                    return redirect()->route('meetings.my_meetings')->with('success_message', "Se canceló la consulta del {$datetime} y se registró la consulta alternativa con su motivo de cancelación de manera satisfactoria."); 
 
+                    return redirect()->route('meetings.my_meetings')->with('success_message', "Se canceló la consulta del {$datetime} y se registró la consulta alternativa con su motivo de cancelación de manera satisfactoria.");
+                } else {
+                    return redirect()->route('meetings.my_meetings')->with('error_message', "La fecha y hora alternativa no puede ser anterior al momento actual.");
                 }
-
-                else
-                {
-                    return redirect()->route('meetings.my_meetings')->with('error_message', "La fecha y hora alternativa no puede ser anterior al momento actual."); 
-                    
-                }
-                
-    
-            }
-
-    
-            else{
+            } else {
                 return redirect()->route('meetings.my_meetings')->with('error_message', 'Fecha y hora no válidas.');
             }
-    
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('meetings.my_meetings')->with('error_message', 'Hubo un error y no se pudo cancelar la consulta.');
         }
     }
@@ -285,21 +270,12 @@ class MeetingController extends Controller
     public function history()
     {
 
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $user = Auth::user();
-            if($user->type == 'teacher')
-            {
+            if ($user->type == 'teacher') {
                 $meetings = $user->meetings;
                 return view('meetings.view_history')->with('meetings', $meetings);
-
-            }
-            else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
-        }
-
-        else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
-
+            } else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
+        } else return redirect()->route('home')->with('error_message', 'Usted no posee accesos para acceder a esta página');
     }
-
-
 }
