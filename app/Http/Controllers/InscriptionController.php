@@ -106,7 +106,7 @@ class InscriptionController extends Controller
 
             if ($meeting->first()) {
 
-                $exists_inscriptions = Inscription::all()->where('meeting_id', $meeting->first()->id)->where('datetime', $datetime);
+                $exists_inscriptions = Inscription::all()->where('meeting_id', $meeting->first()->id)->where('datetime', $datetime)->where('student_id', $user->id);
                 if ($exists_inscriptions->first()) {
 
                     return redirect()->route('inscriptions_user.list')->with('error_message', 'Usted ya se encuentra inscripto a la consulta seleccionada');
@@ -182,7 +182,7 @@ class InscriptionController extends Controller
 
             $today = new Carbon();
 
-           
+
             $next_inscriptions = $user->inscriptions
                 ->where('datetime', '>=', $today)
                 ->sortBy('datetime', 0, $orderDescending)
