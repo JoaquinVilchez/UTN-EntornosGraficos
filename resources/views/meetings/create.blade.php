@@ -144,9 +144,10 @@
                 },
                 data:{subjectId:subjectId},
                 success:function(data){
+                    const dataArray = Object.values(data);
                     let option;
                     console.log(data)
-                    data.forEach(teacher => {
+                    dataArray.forEach(teacher => {
                         console.log(teacher)
                         option = `<option value="${teacher.id}">${teacher.first_name} ${teacher.last_name}</option>`;
                         selectTeachers.append(option);
