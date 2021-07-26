@@ -7,7 +7,7 @@
                 @include('elements.messages')
                 <div class="d-flex justify-content-between align-items-center my-2">
                     <div class="card d-flex justify-content-between mb-2">
-                        <h1 class="card-header">Consulta del {{$datetime->format('d-m-Y h:i')}}</h1>
+                        <h1 class="card-header">Consulta del {{$datetime->format('d-m-Y H:i')}}</h1>
                         <div class="card-body">
                           <p class="card-text">
                                 Materia: {{$meeting->subject->name}}<br>

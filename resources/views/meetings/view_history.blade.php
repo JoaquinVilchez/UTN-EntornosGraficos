@@ -48,7 +48,7 @@
 
                                                     @foreach ($dates as $date)
                                                     <tr>
-                                                        <td>{{$date->format('d-m-Y h:i')}}</td>
+                                                        <td>{{$date->format('d-m-Y H:i')}}</td>
                                                         <td>{{$meeting->getType()}}</td>
                                                         <td>
                                                             @if($meeting->type == 'face-to-face')
@@ -73,7 +73,7 @@
                                                         </td>
                                                         <td>
 
-                                                            <a class="" href="{{route('meetings.meeting_details', [$meeting->id, $date->format('Y-m-d h:i')])}}"> Ver detalles</a>
+                                                            <a class="" href="{{route('meetings.meeting_details', [$meeting->id, $date->format('Y-m-d H:i')])}}"> Ver detalles</a>
                                                         </td>
                                                         </tr>
 
